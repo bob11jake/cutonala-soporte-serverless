@@ -23,7 +23,7 @@
   .card p { margin: 0; font-size: 20px; color: #334155; line-height: 1.45; }
   .tag { display: inline-block; font-size: 14px; font-weight: 700; color: #fff; padding: 3px 9px; border-radius: 6px; margin-bottom: 8px; letter-spacing: .4px; }
   .s3 { background: #3f8624; } .lam { background: #ed7100; } .ddb { background: #4d27aa; } .pink { background: #e7157b; } .cw { background: #c7136a; }
-  table { border-collapse: collapse; width: 100%; font-size: 19px; }
+  table { border-collapse: collapse; width: 100%; font-size: 17px; }
   th { background: #0f172a; color: #fff; text-align: left; padding: 11px 14px; }
   td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
   code { font-family: Consolas, Menlo, monospace; background: #f1f5f9; padding: 1px 6px; border-radius: 4px; font-size: .9em; }
@@ -149,16 +149,16 @@ python tests/servidor_local.py
 <!-- 8 -->
 <section class="slide"><div class="barra"></div>
   <h2>Pruebas de resistencia</h2>
-  <p class="bajada"><code>tests/chaos.py</code> rompe componentes reales, observa, restaura y mide la recuperación.</p>
+  <p class="bajada"><code>tests/chaos.py</code> rompe componentes reales, observa, restaura y mide la recuperación. <b class="ok">7 de 7 superadas.</b></p>
   <table>
-    <tr><th>Si falla…</th><th>Cómo se simula</th><th>Qué hace el sistema</th></tr>
-    <tr><td>Lambda sin capacidad</td><td>Concurrencia reservada = 0</td><td>El frontend reintenta y avisa “servicio degradado”; alarma por correo; se recupera sola</td></tr>
-    <tr><td>DynamoDB</td><td>La API apunta a una tabla inexistente</td><td>503 con mensaje claro, sin datos a medias; <code>/health</code> lo detecta</td></tr>
-    <tr><td>SNS</td><td>Topic inexistente + ticket crítico</td><td>El ticket se guarda; solo se pierde el correo (degradación elegante)</td></tr>
-    <tr><td>S3 (sitio)</td><td>Se borra <code>index.html</code></td><td>El versionado lo recupera en segundos, sin redeploy</td></tr>
-    <tr><td>Datos</td><td>Restauración Point-in-Time</td><td>Copia completa de la tabla a cualquier segundo de 35 días</td></tr>
-    <tr><td>Ataques</td><td>JSON roto, 1 MB, token falso, fuerza bruta</td><td>Siempre 4xx, nunca 5xx; bloqueo tras 5 intentos; anti-XSS</td></tr>
-    <tr><td>Carga</td><td>200 peticiones simultáneas</td><td>Lambda escala sola, 0 errores</td></tr>
+    <tr><th>Si falla…</th><th>Cómo se simula</th><th>Qué hace el sistema</th><th>Medido en AWS</th></tr>
+    <tr><td>Lambda sin capacidad</td><td>Concurrencia reservada = 0</td><td>El frontend reintenta y avisa “servicio degradado”; alarma por correo</td><td class="ok">429 · recupera en 0.3 s</td></tr>
+    <tr><td>DynamoDB</td><td>La API apunta a una tabla inexistente</td><td>503 con mensaje claro, sin datos a medias; <code>/health</code> lo detecta</td><td class="ok">503 · recupera en 1.2 s</td></tr>
+    <tr><td>SNS</td><td>Topic inexistente + ticket crítico</td><td>El ticket se guarda; solo se pierde el correo (degradación elegante)</td><td class="ok">201 · inmediata</td></tr>
+    <tr><td>S3 (sitio)</td><td>Se borra <code>index.html</code></td><td>El versionado lo recupera sin redeploy</td><td class="ok">404 → 200 en 0.5 s</td></tr>
+    <tr><td>Datos</td><td>Restauración Point-in-Time</td><td>Copia completa de la tabla a cualquier segundo de 35 días</td><td class="ok">PITR activo</td></tr>
+    <tr><td>Ataques</td><td>JSON roto, 1 MB, token falso, fuerza bruta</td><td>Siempre 4xx, nunca 5xx; bloqueo tras 5 intentos; anti-XSS</td><td class="ok">7/7 en 4xx · 0 errores 5xx</td></tr>
+    <tr><td>Carga</td><td>200 peticiones simultáneas</td><td>Lambda escala sola</td><td class="ok">200/200 OK · p95 550 ms</td></tr>
   </table>
   <div class="marca">CUTonala Soporte Técnico</div><div class="num">8</div>
 </section>

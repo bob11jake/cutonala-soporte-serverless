@@ -107,7 +107,7 @@
 <div class="tarjeta"><h3>Operación</h3><ul>
   <li>Infraestructura 100% como código (despliegue, estado y destrucción).</li>
   <li>Alarmas, dashboard y logs estructurados en CloudWatch.</li>
-  <li>22 pruebas automatizadas y 7 pruebas de fallas reales.</li>
+  <li>22 pruebas automatizadas y 7 pruebas de fallas reales (7/7 superadas en AWS).</li>
 </ul></div>
 </div>
 
@@ -223,7 +223,7 @@ notepad $HOME\.aws\credentials   # Windows</pre></div>
 
 <h3>Paso 4. Desplegar</h3>
 <pre>python infra/deploy.py --email correo_del_equipo@ejemplo.com</pre>
-<p>El script ejecuta 9 etapas: verifica credenciales, crea el topic SNS (y la suscripción), las 3 tablas con índices, PITR y TTL, los usuarios iniciales, el bucket de evidencias, las 2 Lambdas con su Function URL, la regla de EventBridge, las alarmas y el dashboard, y publica el frontend. Al final imprime la URL de la aplicación. Confirma el correo de suscripción que envía AWS para recibir alertas.</p>
+<p>El script ejecuta 9 etapas (en nuestra cuenta tardó 612 s, la mayor parte creando el índice de la auditoría): verifica credenciales, crea el topic SNS (y la suscripción), las 3 tablas con índices, PITR y TTL, los usuarios iniciales, el bucket de evidencias, las 2 Lambdas con su Function URL, la regla de EventBridge, las alarmas y el dashboard, y publica el frontend. Al final imprime la URL de la aplicación. Confirma el correo de suscripción que envía AWS para recibir alertas.</p>
 
 <h3>Paso 5. Datos de demostración y verificación</h3>
 <pre>python tests/seed_and_resilience.py   # borra los tickets y carga 8 de ejemplo en distintos estados
@@ -271,7 +271,7 @@ python -m pytest -q                    # 22 pruebas con AWS simulado (no usa la 
   <li><strong>Costo proporcional al uso:</strong> con tráfico de un campus el costo mensual es de un dígito en dólares (sección 6).</li>
   <li><strong>Alta disponibilidad incluida:</strong> Lambda, DynamoDB, S3 y SNS funcionan en varias zonas de disponibilidad sin configurarlo.</li>
   <li><strong>Escalado automático:</strong> 200 peticiones simultáneas se atienden sin cambios (escenario 1).</li>
-  <li><strong>Despliegue reproducible:</strong> todo el ambiente se crea en ≈ 1-2 minutos y se destruye con un comando.</li>
+  <li><strong>Despliegue reproducible:</strong> todo el ambiente se crea y se destruye con un comando (≈ 10 minutos la primera vez, por la creación de índices de DynamoDB).</li>
 </ul>
 <h3>Desventajas y limitaciones</h3>
 <ul>
@@ -304,18 +304,18 @@ python -m pytest -q                    # 22 pruebas con AWS simulado (no usa la 
 <h3>Resultados</h3>
 <p><strong>Pruebas automatizadas (pytest + moto):</strong> <span class="ok">22 de 22 superadas</span>, incluyendo DynamoDB caído (503 controlado), SNS caído, auditoría caída, error inesperado (500 sin detalles), concurrencia, bloqueo por fuerza bruta, tokens alterados/expirados y migración de un despliegue anterior.</p>
 <p><strong>Prueba de navegador (Playwright):</strong> flujo completo de alumno y administrador. Un título con <code>&lt;img onerror=alert()&gt;</code> se muestra como texto y no se ejecuta; la foto se sube y se visualiza; la app sigue operando sin Chart.js.</p>
-<p><strong>Escenarios sobre AWS (<code>tests/chaos.py</code>):</strong></p>
+<p><strong>Escenarios sobre AWS real (<code>tests/chaos.py</code>, 25 de noviembre de 2026, us-east-1):</strong> <span class="ok">7 de 7 superados</span>.</p>
 <table>
   <tr><th>#</th><th>Escenario</th><th>Observado</th><th>Recuperación</th><th>Resultado</th></tr>
-  <tr><td>1</td><td>200 peticiones simultáneas</td><td>[pegar de resultados_resiliencia.md]</td><td>N/A</td><td class="pend">Pendiente</td></tr>
-  <tr><td>2</td><td>Lambda sin capacidad</td><td>[ ]</td><td>[ ] s</td><td class="pend">Pendiente</td></tr>
-  <tr><td>3</td><td>DynamoDB no disponible</td><td>[ ]</td><td>[ ] s</td><td class="pend">Pendiente</td></tr>
-  <tr><td>4</td><td>SNS no disponible</td><td>[ ]</td><td>Inmediata</td><td class="pend">Pendiente</td></tr>
-  <tr><td>5</td><td>index.html borrado</td><td>[ ]</td><td>[ ] s</td><td class="pend">Pendiente</td></tr>
-  <tr><td>6</td><td>Entradas maliciosas y fuerza bruta</td><td>[ ]</td><td>N/A</td><td class="pend">Pendiente</td></tr>
-  <tr><td>7</td><td>Point-in-Time Recovery</td><td>[ ]</td><td>[ ] min</td><td class="pend">Pendiente</td></tr>
+  <tr><td>1</td><td>200 peticiones simultáneas</td><td>200/200 respuestas HTTP 200; p50 448 ms, p95 550 ms, máx. 930 ms</td><td>N/A</td><td class="ok">Superada</td></tr>
+  <tr><td>2</td><td>Lambda sin capacidad</td><td>HTTP 429 <code>ReservedFunctionConcurrentInvocationLimitExceeded</code></td><td>0.3 s</td><td class="ok">Superada</td></tr>
+  <tr><td>3</td><td>DynamoDB no disponible</td><td>GET, POST y /health → 503 con mensaje controlado; sin datos parciales</td><td>1.2 s</td><td class="ok">Superada</td></tr>
+  <tr><td>4</td><td>SNS no disponible</td><td>Ticket CRÍTICO creado (HTTP 201) con <code>alerta_enviada=false</code></td><td>Inmediata</td><td class="ok">Superada</td></tr>
+  <tr><td>5</td><td>index.html borrado</td><td>Antes 200 → durante 404 → después 200 (versionado)</td><td>0.5 s</td><td class="ok">Superada</td></tr>
+  <tr><td>6</td><td>Entradas maliciosas y fuerza bruta</td><td>400, 400, 400, 401, 403, 400 y bloqueo 429; ningún 5xx</td><td>N/A</td><td class="ok">Superada</td></tr>
+  <tr><td>7</td><td>Point-in-Time Recovery</td><td>PITR activo en la tabla de tickets (la restauración completa se ejecuta con <code>--restaurar</code>)</td><td>—</td><td class="ok">Superada</td></tr>
 </table>
-<div class="aviso">Esta tabla se completa al ejecutar <code>python tests/chaos.py</code> en la cuenta del laboratorio; el script genera <code>docs/resultados_resiliencia.md</code> con los valores medidos. En modo local, los escenarios 1 y 6 ya resultaron superados (200/200 respuestas 200; todos los ataques respondieron 4xx y el bloqueo devolvió 429).</div>
+<div class="nota"><strong>Lección aprendida durante las pruebas:</strong> en una primera ejecución contra un despliegue anterior (sin versionado en el bucket), el escenario 5 borró <code>index.html</code> de forma permanente y el sitio quedó caído hasta volver a desplegar. Se corrigió el script: ahora verifica que la API desplegada sea la versión actual y no inyecta la falla si el bucket no tiene versionado. Esto mostró por qué el versionado de S3 es necesario.</div>
 
 <h3>Riesgos que no se cubren</h3>
 <ul>
