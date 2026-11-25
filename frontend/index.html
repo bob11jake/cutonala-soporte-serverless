@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CUTonala Soporte tecnico - Mesa de Servicios</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <div class="brand-box">
+      <div class="brand-logo">CUT</div>
+      <div>
+        <h1>CUTonala Soporte tecnico</h1>
+        <small>Centro Universitario de Tonala - Sistema Institucional de Atencion e Incidencias</small>
+      </div>
+    </div>
+    <span id="health-indicator" class="status-pill">Verificando servicio...</span>
+  </header>
+
+  <!-- PANTALLA 1: SELECCION DE ACCESO -->
+  <div id="portal-view" class="portal-wrapper">
+    <div class="portal-intro">
+      <span class="campus-chip">PORTAL INSTITUCIONAL CUTONALA</span>
+      <h2>CUTonala Soporte tecnico</h2>
+      <p>Selecciona tu perfil para reportar o gestionar incidencias dentro del campus</p>
+    </div>
+
+    <div class="portal-grid">
+      <!-- Tarjeta Comunidad Universitaria -->
+      <div class="portal-card">
+        <div>
+          <span class="portal-tag">COMUNIDAD UNIVERSITARIA - SIN CONTRASENA</span>
+          <h3>Portal de Alumnos y Docentes</h3>
+          <p style="color:#475569; font-size:0.92rem; line-height:1.5;">
+            Reporta fallas de electricidad agua seguridad infraestructura o red en aulas y laboratorios sin necesidad de crear cuenta.
+          </p>
+          <form id="form-guest">
+            <div class="field-group">
+              <label for="guest-name">Nombre del solicitante</label>
+              <input type="text" id="guest-name" placeholder="Escribe tu nombre para continuar" required />
+            </div>
+            <button type="submit" style="width:100%;">Ingresar a Reportar Incidencia</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Tarjeta Tecnico / Administrador -->
+      <div class="portal-card staff-card">
+        <div>
+          <span class="portal-tag staff">PERSONAL AUTORIZADO - RBAC</span>
+          <h3>Acceso Tecnico y Administrador</h3>
+          <p style="color:#475569; font-size:0.92rem; line-height:1.5;">
+            Inicia sesion con credenciales institucionales para atender reportes del campus controlar tiempos SLA y auditar eventos.
+          </p>
+          <form id="form-staff-login">
+            <div class="field-group">
+              <label for="login-email">Correo institucional</label>
+              <input type="email" id="login-email" placeholder="admin@ticketflow.edu" required />
+            </div>
+            <div class="field-group">
+              <label for="login-pass">Contrasena</label>
+              <input type="password" id="login-pass" placeholder="********" required />
+            </div>
+            <button type="submit" class="secondary" style="width:100%;">Iniciar Sesion</button>
+          </form>
+        </div>
+        <div class="demo-helpers">
+          <div>Autocompletar credenciales de demostracion:</div>
+          <button type="button" class="outline" onclick="rellenarCredenciales('admin@ticketflow.edu', 'Admin123!')">Cargar admin</button>
+          <button type="button" class="outline" onclick="rellenarCredenciales('soporte@ticketflow.edu', 'Soporte123!')">Cargar tecnico</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANTALLA 2: APLICACION PRINCIPAL -->
+  <div id="app-view" class="container" style="display:none;">
+    <div class="auth-bar">
+      <div id="user-session-info"></div>
+      <button class="outline" onclick="cerrarSesion()">Cambiar Rol / Salir</button>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><span id="kpi-total">0</span><div class="kpi-label">Total Reportes</div></div>
+      <div class="kpi kpi-warn"><span id="kpi-abierto">0</span><div class="kpi-label">Abiertos</div></div>
+      <div class="kpi kpi-info"><span id="kpi-progreso">0</span><div class="kpi-label">En Atencion</div></div>
+      <div class="kpi kpi-danger"><span id="kpi-vencidos" style="color:#dc2626;">0</span><div class="kpi-label">SLA Vencidos</div></div>
+    </div>
+
+    <div class="charts-grid" id="analytics-section">
+      <div class="card">
+        <h3>Distribucion por Estado</h3>
+        <canvas id="chart-estados" height="170"></canvas>
+      </div>
+      <div class="card">
+        <h3>Reportes por Area del Campus</h3>
+        <canvas id="chart-categorias" height="170"></canvas>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>Registrar Nueva Incidencia en CUTonala</h3>
+      <form id="form-ticket">
+        <div class="form-row">
+          <input type="text" id="titulo" placeholder="Titulo corto del problema sin comas" required />
+          <select id="categoria">
+            <option value="ELECTRICIDAD" selected>Electricidad y Alumbrado</option>
+            <option value="AGUA">Agua y Plomeria</option>
+            <option value="SEGURIDAD">Seguridad y Protocolo de Violencia</option>
+            <option value="INFRAESTRUCTURA">Aulas e Infraestructura</option>
+            <option value="CONECTIVIDAD">Red y Equipo de Computo</option>
+          </select>
+          <select id="prioridad">
+            <option value="BAJA">Prioridad Baja (SLA 72h)</option>
+            <option value="MEDIA" selected>Prioridad Media (SLA 24h)</option>
+            <option value="ALTA">Prioridad Alta (SLA 8h)</option>
+            <option value="CRITICA">Prioridad Critica (SLA 2h)</option>
+          </select>
+        </div>
+        <textarea id="descripcion" rows="2" placeholder="Describe detalladamente el problema edificio salon o ubicacion..." required></textarea>
+        <div style="margin-top:0.75rem;">
+          <button type="submit">Crear Ticket con Seguimiento SLA</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="card">
+      <h3>Bandeja Operativa del Campus</h3>
+      <div class="toolbar">
+        <input type="text" id="filtro-texto" placeholder="Buscar por ID o titulo..." oninput="cargarTickets()" style="min-width:230px;" />
+        <select id="filtro-estado" onchange="document.getElementById('filtro-categoria').value=''; cargarTickets()">
+          <option value="">Todos los estados</option>
+          <option value="ABIERTO">Abiertos</option>
+          <option value="EN_PROGRESO">En Progreso</option>
+          <option value="EN_REVISION">En Revision</option>
+          <option value="RESUELTO">Resueltos</option>
+        </select>
+        <select id="filtro-categoria" onchange="document.getElementById('filtro-estado').value=''; cargarTickets()">
+          <option value="">Todas las categorias</option>
+          <option value="ELECTRICIDAD">Electricidad</option>
+          <option value="AGUA">Agua</option>
+          <option value="SEGURIDAD">Seguridad y Violencia</option>
+          <option value="INFRAESTRUCTURA">Infraestructura</option>
+          <option value="CONECTIVIDAD">Conectividad</option>
+        </select>
+        <button class="outline" onclick="exportarCSV()">Exportar CSV</button>
+      </div>
+      <div id="lista-tickets">Cargando incidencias...</div>
+    </div>
+
+    <div class="card" id="audit-section" style="display:none;">
+      <h3>Bitacora de Auditoria del Sistema</h3>
+      <table class="audit-table">
+        <thead>
+          <tr><th>Fecha/Hora</th><th>Usuario</th><th>Accion</th><th>Detalle</th></tr>
+        </thead>
+        <tbody id="audit-body"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="api.js"></script>
+  <script src="charts.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
