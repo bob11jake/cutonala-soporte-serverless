@@ -1,20 +1,19 @@
 let chartEstados = null;
 let chartCategorias = null;
 
-function renderizarGraficas(tickets) {
+const CATEGORIAS = ["ELECTRICIDAD", "AGUA", "SEGURIDAD", "INFRAESTRUCTURA", "CONECTIVIDAD"];
+
+// Recibe los contadores globales de /metricas (c_<CATEGORIA>, e_<ESTADO>).
+function renderizarGraficas(c) {
+  window.ultimosContadores = c;
   const ctxEst = document.getElementById("chart-estados");
   const ctxCat = document.getElementById("chart-categorias");
-  if (!ctxEst || !ctxCat || typeof Chart === "undefined") return;
-
-  const conteoEstados = {
-    ABIERTO: tickets.filter(t => t.estado === "ABIERTO").length,
-    EN_PROGRESO: tickets.filter(t => t.estado === "EN_PROGRESO").length,
-    EN_REVISION: tickets.filter(t => t.estado === "EN_REVISION").length,
-    RESUELTO: tickets.filter(t => t.estado === "RESUELTO").length,
-  };
-
-  const categorias = ["ELECTRICIDAD", "AGUA", "SEGURIDAD", "INFRAESTRUCTURA", "CONECTIVIDAD"];
-  const conteoCats = categorias.map(c => tickets.filter(t => t.categoria === c).length);
+  // Si el CDN de Chart.js no carga, la aplicacion sigue funcionando sin graficas.
+  if (!ctxEst || !ctxCat || typeof Chart === "undefined") {
+    document.getElementById("analytics-section")?.classList.add("sin-graficas");
+    return;
+  }
+  document.getElementById("analytics-section")?.classList.remove("sin-graficas");
 
   if (chartEstados) chartEstados.destroy();
   chartEstados = new Chart(ctxEst, {
@@ -22,7 +21,7 @@ function renderizarGraficas(tickets) {
     data: {
       labels: ["Abiertos", "En Progreso", "En Revision", "Resueltos"],
       datasets: [{
-        data: Object.values(conteoEstados),
+        data: [c.e_ABIERTO || 0, c.e_EN_PROGRESO || 0, c.e_EN_REVISION || 0, c.e_RESUELTO || 0],
         backgroundColor: ["#2563eb", "#f59e0b", "#8b5cf6", "#16a34a"],
       }],
     },
@@ -33,10 +32,10 @@ function renderizarGraficas(tickets) {
   chartCategorias = new Chart(ctxCat, {
     type: "bar",
     data: {
-      labels: categorias,
+      labels: CATEGORIAS,
       datasets: [{
         label: "Reportes por Area del Campus",
-        data: conteoCats,
+        data: CATEGORIAS.map(cat => c[`c_${cat}`] || 0),
         backgroundColor: "#1d4ed8",
         borderRadius: 6,
       }],

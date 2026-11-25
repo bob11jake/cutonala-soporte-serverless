@@ -521,3 +521,14 @@ button.outline:hover {
 .audit-table tr:hover td {
   background: #f8fafc;
 }
+/* --- Evidencias, acciones y estados de resiliencia --- */
+.ticket-desc { margin: 0.5rem 0; color: #334155; line-height: 1.45; overflow-wrap: anywhere; }
+.acciones { display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center; }
+.boton-archivo { display: inline-flex; align-items: center; cursor: pointer; padding: 0.45rem 0.9rem; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 0.85rem; font-weight: 600; color: #1e3a8a; background: #fff; }
+.boton-archivo:hover { background: #eff6ff; }
+.evidencias { display: flex; gap: 0.5rem; flex-wrap: wrap; margin: 0.5rem 0; }
+.evidencias img { width: 96px; height: 72px; object-fit: cover; border-radius: 6px; border: 1px solid #e2e8f0; }
+.alerta-resiliencia { color: #dc2626; font-weight: 700; }
+.sin-graficas canvas { display: none; }
+.sin-graficas .card::after { content: "Graficas no disponibles (no cargo Chart.js). El resto de la aplicacion sigue operando."; color: #64748b; font-size: 0.85rem; }
+button:disabled { opacity: 0.6; cursor: wait; }

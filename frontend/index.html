@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CUTonala Soporte tecnico - Mesa de Servicios</title>
   <link rel="stylesheet" href="styles.css" />
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- async: si el CDN falla o tarda, la aplicacion no se bloquea -->
+  <script async src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+          onload="window.ultimosContadores && renderizarGraficas(window.ultimosContadores)"></script>
 </head>
 <body>
   <header>
@@ -104,7 +106,7 @@
       <h3>Registrar Nueva Incidencia en CUTonala</h3>
       <form id="form-ticket">
         <div class="form-row">
-          <input type="text" id="titulo" placeholder="Titulo corto del problema sin comas" required />
+          <input type="text" id="titulo" placeholder="Titulo corto del problema" minlength="4" maxlength="120" required />
           <select id="categoria">
             <option value="ELECTRICIDAD" selected>Electricidad y Alumbrado</option>
             <option value="AGUA">Agua y Plomeria</option>
@@ -119,7 +121,11 @@
             <option value="CRITICA">Prioridad Critica (SLA 2h)</option>
           </select>
         </div>
-        <textarea id="descripcion" rows="2" placeholder="Describe detalladamente el problema edificio salon o ubicacion..." required></textarea>
+        <textarea id="descripcion" rows="2" minlength="5" maxlength="2000" placeholder="Describe detalladamente el problema: edificio, salon o ubicacion..." required></textarea>
+        <div class="field-group" style="margin-top:0.75rem;">
+          <label for="evidencia">Foto de evidencia (opcional, JPG/PNG/WEBP, max. 5 MB)</label>
+          <input type="file" id="evidencia" accept="image/jpeg,image/png,image/webp" />
+        </div>
         <div style="margin-top:0.75rem;">
           <button type="submit">Crear Ticket con Seguimiento SLA</button>
         </div>
@@ -129,7 +135,7 @@
     <div class="card">
       <h3>Bandeja Operativa del Campus</h3>
       <div class="toolbar">
-        <input type="text" id="filtro-texto" placeholder="Buscar por ID o titulo..." oninput="cargarTickets()" style="min-width:230px;" />
+        <input type="text" id="filtro-texto" placeholder="Buscar por ID o titulo..." style="min-width:230px;" />
         <select id="filtro-estado" onchange="document.getElementById('filtro-categoria').value=''; cargarTickets()">
           <option value="">Todos los estados</option>
           <option value="ABIERTO">Abiertos</option>
