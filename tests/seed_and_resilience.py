@@ -15,7 +15,7 @@ from pathlib import Path
 import boto3
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import cargar_estado, req  # noqa: E402
+from common import cargar_estado, req, verificar_version_desplegada  # noqa: E402
 from config import AUDIT_TABLE, REGION, TICKETS_TABLE  # noqa: E402
 
 API = cargar_estado()["api_url"]
@@ -63,6 +63,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--conservar", action="store_true", help="no borrar los datos existentes")
     args = parser.parse_args()
+    verificar_version_desplegada(API)
     if not args.conservar:
         limpiar()
 

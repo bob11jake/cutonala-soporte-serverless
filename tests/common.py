@@ -16,7 +16,21 @@ def cargar_estado():
     estado = leer_estado()
     if not estado.get("api_url"):
         sys.exit("No existe infra/state.json. Ejecuta primero: python infra/deploy.py")
+    estado["api_url"] = estado["api_url"].rstrip("/")  # despliegues viejos la guardaban con "/"
     return estado
+
+
+def verificar_version_desplegada(api):
+    """Las pruebas requieren el codigo actual; un despliegue anterior da resultados enganosos."""
+    status, data, _ = req(api + "/health")
+    if status != 200 or not isinstance(data, dict) or data.get("status") != "ok":
+        sys.exit(
+            "\nERROR: la API desplegada no es la version actual del proyecto "
+            f"(/health respondio HTTP {status} con otro contenido).\n"
+            "Ejecuta primero:  python infra/deploy.py\n"
+            "y revisa que termine con 'DESPLIEGUE COMPLETADO'."
+        )
+    return data
 
 
 def req(url, metodo="GET", payload=None, token=None, raw=None, timeout=15):

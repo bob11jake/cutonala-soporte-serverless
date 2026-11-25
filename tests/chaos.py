@@ -23,7 +23,7 @@ from pathlib import Path
 import boto3
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from common import cargar_estado, req  # noqa: E402
+from common import cargar_estado, req, verificar_version_desplegada  # noqa: E402
 from config import API_LAMBDA, REGION, RESTORE_TABLE, ROOT, TICKETS_TABLE, USERS_TABLE  # noqa: E402
 
 estado = cargar_estado()
@@ -80,7 +80,7 @@ def login_admin():
 def e1_linea_base():
     titulo(1, "Linea base y carga concurrente (200 peticiones, 25 hilos)")
     status, data, ms = req(API + "/health")
-    print(f"  /health -> HTTP {status} en {ms} ms: {data}")
+    print(f"  /health -> HTTP {status} en {ms} ms: {str(data)[:150]}")
     with ThreadPoolExecutor(max_workers=25) as pool:
         res = list(pool.map(lambda _: req(API + "/tickets"), range(200)))
     codigos = [r[0] for r in res]
@@ -163,6 +163,11 @@ def e4_sns_caido():
 def e5_frontend_borrado():
     titulo(5, "Amazon S3: se borra por accidente index.html del sitio web")
     bucket = estado["bucket"]
+    if s3.get_bucket_versioning(Bucket=bucket).get("Status") != "Enabled":
+        # Sin versionado el borrado seria permanente: no se inyecta la falla.
+        print("  !! El bucket no tiene versionado; se omite para no borrar el sitio. Ejecuta python infra/deploy.py")
+        registrar(5, "Amazon S3 (sitio web)", "Borrado accidental de index.html", "-", "Versionado desactivado", "-", False)
+        return
     s_antes, _, _ = req(WEB + "/index.html")
     s3.delete_object(Bucket=bucket, Key="index.html")
     print("  Falla inyectada: index.html eliminado del bucket")
@@ -277,6 +282,7 @@ def main():
     escenarios = {1: e1_linea_base, 2: e2_lambda_sin_capacidad, 3: e3_dynamodb_no_disponible, 4: e4_sns_caido,
                   5: e5_frontend_borrado, 6: e6_ataques, 7: lambda: e7_perdida_de_datos(args.restaurar)}
     print(f"API: {API}\nWeb: {WEB}")
+    verificar_version_desplegada(API)
     for n in args.solo or sorted(escenarios):
         try:
             escenarios[n]()
