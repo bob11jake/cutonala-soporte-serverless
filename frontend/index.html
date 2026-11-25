@@ -6,7 +6,7 @@
   <title>CUTonala Soporte tecnico - Mesa de Servicios</title>
   <link rel="stylesheet" href="styles.css" />
   <!-- async: si el CDN falla o tarda, la aplicacion no se bloquea -->
-  <script async src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"
+  <script async src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"
           onload="window.ultimosContadores && renderizarGraficas(window.ultimosContadores)"></script>
 </head>
 <body>
@@ -94,11 +94,11 @@
     <div class="charts-grid" id="analytics-section">
       <div class="card">
         <h3>Distribucion por Estado</h3>
-        <canvas id="chart-estados" height="170"></canvas>
+        <div class="chart-box"><canvas id="chart-estados"></canvas></div>
       </div>
       <div class="card">
         <h3>Reportes por Area del Campus</h3>
-        <canvas id="chart-categorias" height="170"></canvas>
+        <div class="chart-box"><canvas id="chart-categorias"></canvas></div>
       </div>
     </div>
 

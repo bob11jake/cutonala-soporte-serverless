@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Presentación — CUTonala Soporte Técnico</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Inter", "Segoe UI", Helvetica, Arial, sans-serif; color: #0f172a; }
+  .slide { width: 1280px; height: 720px; padding: 56px 72px; position: relative; overflow: hidden; break-after: page; background: #fff; }
+  .slide:last-child { break-after: auto; }
+  .slide h2 { font-size: 44px; margin: 0 0 8px; letter-spacing: -0.5px; }
+  .slide .bajada { font-size: 22px; color: #475569; margin: 0 0 32px; }
+  .num { position: absolute; bottom: 26px; right: 40px; font-size: 14px; color: #94a3b8; }
+  .marca { position: absolute; bottom: 26px; left: 72px; font-size: 14px; color: #94a3b8; }
+  .barra { position: absolute; top: 0; left: 0; right: 0; height: 8px; background: linear-gradient(90deg, #1d4ed8, #f59e0b); }
+  ul.grande { font-size: 25px; line-height: 1.5; padding-left: 26px; margin: 0; }
+  ul.grande li { margin-bottom: 10px; }
+  .grid { display: grid; gap: 18px; }
+  .g2 { grid-template-columns: 1fr 1fr; } .g3 { grid-template-columns: repeat(3, 1fr); }
+  .card { border: 1px solid #e2e8f0; border-radius: 14px; padding: 24px 26px; background: #f8fafc; }
+  .card h3 { margin: 0 0 8px; font-size: 25px; }
+  .card p { margin: 0; font-size: 20px; color: #334155; line-height: 1.45; }
+  .tag { display: inline-block; font-size: 14px; font-weight: 700; color: #fff; padding: 3px 9px; border-radius: 6px; margin-bottom: 8px; letter-spacing: .4px; }
+  .s3 { background: #3f8624; } .lam { background: #ed7100; } .ddb { background: #4d27aa; } .pink { background: #e7157b; } .cw { background: #c7136a; }
+  table { border-collapse: collapse; width: 100%; font-size: 19px; }
+  th { background: #0f172a; color: #fff; text-align: left; padding: 11px 14px; }
+  td { padding: 10px 14px; border-bottom: 1px solid #e2e8f0; vertical-align: top; }
+  code { font-family: Consolas, Menlo, monospace; background: #f1f5f9; padding: 1px 6px; border-radius: 4px; font-size: .9em; }
+  .portada { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%); color: #fff; display: flex; flex-direction: column; justify-content: center; }
+  .portada h1 { font-size: 64px; margin: 24px 0 12px; letter-spacing: -1px; }
+  .portada .sub { font-size: 26px; color: #cbd5e1; }
+  .logo { width: 84px; height: 84px; border-radius: 18px; background: #f59e0b; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 30px; }
+  .chips span { display: inline-block; border: 1px solid rgba(255,255,255,.35); border-radius: 30px; padding: 6px 16px; margin: 6px 8px 0 0; font-size: 17px; }
+  .paso { display: flex; gap: 18px; align-items: flex-start; margin-bottom: 22px; }
+  .paso b.n { flex: none; width: 42px; height: 42px; border-radius: 50%; background: #1d4ed8; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 17px; }
+  .paso div { font-size: 23px; line-height: 1.4; }
+  .ok { color: #15803d; font-weight: 700; }
+  .barras .fila { display: flex; align-items: center; gap: 14px; margin: 28px 0; font-size: 21px; }
+  .barras .et { width: 260px; }
+  .barras .b { height: 46px; border-radius: 8px; display: flex; align-items: center; padding-left: 14px; color: #fff; font-weight: 700; }
+  .grande-num { font-size: 56px; font-weight: 800; color: #1d4ed8; line-height: 1; }
+  img.full { width: 100%; border-radius: 12px; border: 1px solid #e2e8f0; }
+</style>
+</head>
+<body>
+
+<!-- 1 -->
+<section class="slide portada">
+  <div class="logo">CUT</div>
+  <h1>CUTonala Soporte Técnico</h1>
+  <div class="sub">Mesa de servicios del campus con arquitectura serverless en AWS</div>
+  <div class="chips" style="margin-top:34px">
+    <span>Aplicación web</span><span>6 servicios de AWS</span><span>Infraestructura como código (Python)</span>
+  </div>
+  <div style="position:absolute;bottom:48px;left:72px;font-size:18px;color:#cbd5e1">[Integrante 1] · [Integrante 2] · [Integrante 3] — Noviembre 2026</div>
+</section>
+
+<!-- 2 -->
+<section class="slide"><div class="barra"></div>
+  <h2>El problema y la solución</h2>
+  <p class="bajada">Los reportes de fallas del campus llegan por mensajes y llamadas: sin registro, sin responsable y sin tiempos.</p>
+  <div class="grid g2" style="align-items:start">
+    <ul class="grande">
+      <li><b>Comunidad:</b> reporta con su nombre y una foto, sin crear cuenta.</li>
+      <li><b>Personal técnico:</b> atiende con un flujo y un <b>SLA</b> por prioridad (2 h a 72 h).</li>
+      <li><b>Automático:</b> correo inmediato si es crítico y aviso si se vence el SLA.</li>
+      <li><b>Administración:</b> KPIs, gráficas, auditoría y CSV.</li>
+    </ul>
+    <img class="full" src="../capturas/dashboard.png" alt="Panel de administración">
+  </div>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">2</div>
+</section>
+
+<!-- 3 -->
+<section class="slide" style="padding:36px 56px"><div class="barra"></div>
+  <h2 style="font-size:32px">Arquitectura</h2>
+  <img src="../arquitectura.png" style="width:100%;margin-top:6px" alt="Diagrama de arquitectura">
+  <div class="num">3</div>
+</section>
+
+<!-- 4 -->
+<section class="slide"><div class="barra"></div>
+  <h2>Flujo de datos: reportar una incidencia</h2>
+  <p class="bajada">Qué pasa cuando un alumno reporta “Corte de energía en Edificio B” con prioridad CRÍTICA.</p>
+  <div class="paso"><b class="n">1</b><div>El navegador carga la app desde <b>S3</b> (sitio estático).</div></div>
+  <div class="paso"><b class="n">2</b><div>Envía <code>POST /tickets</code> por HTTPS a la <b>Function URL</b> de <b>Lambda</b>, que valida los datos y calcula el límite del SLA (2 h).</div></div>
+  <div class="paso"><b class="n">3</b><div>Lambda guarda en <b>DynamoDB</b> el ticket <i>y</i> el contador global en <b>una sola transacción</b>; registra el evento en la bitácora.</div></div>
+  <div class="paso"><b class="n">4</b><div>Por ser crítico, publica en <b>SNS</b> → el personal recibe un correo en segundos.</div></div>
+  <div class="paso"><b class="n">5</b><div>La foto se sube <b>directo a S3</b> con una URL firmada de 15 min (no pasa por Lambda).</div></div>
+  <div class="paso"><b class="n">6</b><div>Cada 15 min, <b>EventBridge</b> ejecuta el monitor de SLA; si se vence, otro aviso por SNS. <b>CloudWatch</b> registra todo y dispara alarmas.</div></div>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">4</div>
+</section>
+
+<!-- 5 -->
+<section class="slide"><div class="barra"></div>
+  <h2>La función de cada servicio</h2>
+  <p class="bajada">Seis servicios administrados, ningún servidor que mantener.</p>
+  <div class="grid g3">
+    <div class="card"><span class="tag s3">AMAZON S3</span><h3>Web y evidencias</h3><p>Sitio estático con versionado. Bucket privado de fotos con URLs firmadas y expiración a 1 año.</p></div>
+    <div class="card"><span class="tag lam">AWS LAMBDA</span><h3>API y monitor de SLA</h3><p>11 rutas REST con validación y roles. Una segunda función revisa los SLA cada 15 min.</p></div>
+    <div class="card"><span class="tag ddb">AMAZON DYNAMODB</span><h3>Datos</h3><p>3 tablas on-demand, índices por estado/categoría, transacciones, PITR (35 días) y TTL.</p></div>
+    <div class="card"><span class="tag pink">AMAZON SNS</span><h3>Alertas</h3><p>Correos de tickets críticos, SLA vencidos y alarmas del sistema.</p></div>
+    <div class="card"><span class="tag pink">AMAZON EVENTBRIDGE</span><h3>Programación</h3><p>Regla <code>rate(15 minutes)</code> que dispara el monitor de SLA sin un servidor con cron.</p></div>
+    <div class="card"><span class="tag cw">AMAZON CLOUDWATCH</span><h3>Observabilidad</h3><p>Logs JSON, 4 alarmas, dashboard y la métrica <code>TicketsSLAVencidos</code>.</p></div>
+  </div>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">5</div>
+</section>
+
+<!-- 6 -->
+<section class="slide"><div class="barra"></div>
+  <h2>Diseño de datos en DynamoDB</h2>
+  <p class="bajada">El modelo se diseñó por patrones de acceso: ninguna pantalla recorre toda la tabla.</p>
+  <div class="grid g2">
+    <div class="card"><h3>Índices secundarios</h3><p><code>EstadoIndex</code> y <code>CategoriaIndex</code> (ordenados por fecha) responden los filtros con <i>Query</i>, no con <i>Scan</i>: el costo de cada consulta queda acotado aunque haya miles de tickets.</p></div>
+    <div class="card"><h3>Contadores transaccionales</h3><p>El item <code>#STATS</code> se actualiza en la misma transacción que el ticket. Los KPIs y gráficas cuestan 1 lectura.</p></div>
+    <div class="card"><h3>Escrituras condicionales</h3><p>Si dos técnicos mueven el mismo ticket a la vez, solo uno gana (el otro recibe 409). Los avisos de SLA se envían una sola vez.</p></div>
+    <div class="card"><h3>Ciclo de vida</h3><p>PITR para recuperar datos borrados; TTL borra la bitácora de más de un año sin costo de escritura.</p></div>
+  </div>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">6</div>
+</section>
+
+<!-- 7 -->
+<section class="slide"><div class="barra"></div>
+  <h2>Infraestructura como código</h2>
+  <p class="bajada">Un comando crea todo; no se usa la consola web de AWS.</p>
+  <div class="grid g2" style="align-items:start">
+    <div>
+      <div class="paso"><b class="n">1</b><div>Verifica credenciales y obtiene la cuenta automáticamente.</div></div>
+      <div class="paso"><b class="n">2</b><div>SNS · DynamoDB (índices, PITR, TTL) · usuarios con hash.</div></div>
+      <div class="paso"><b class="n">3</b><div>Bucket de evidencias · 2 Lambdas + Function URL.</div></div>
+      <div class="paso"><b class="n">4</b><div>EventBridge · alarmas y dashboard · publica el frontend.</div></div>
+      <p style="font-size:18px;color:#475569;margin-top:18px"><b>Idempotente:</b> volver a ejecutarlo actualiza en lugar de duplicar, y migra despliegues anteriores.</p>
+    </div>
+    <div>
+      <pre style="background:#0f172a;color:#e2e8f0;border-radius:12px;padding:20px;font-size:19px;line-height:1.7;margin:0">python infra/deploy.py --email ...
+python infra/status.py
+python tests/chaos.py
+python infra/destroy.py
+
+python -m pytest          <span style="color:#86efac"># 22 pruebas</span>
+python tests/servidor_local.py
+                          <span style="color:#86efac"># app sin AWS</span></pre>
+    </div>
+  </div>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">7</div>
+</section>
+
+<!-- 8 -->
+<section class="slide"><div class="barra"></div>
+  <h2>Pruebas de resistencia</h2>
+  <p class="bajada"><code>tests/chaos.py</code> rompe componentes reales, observa, restaura y mide la recuperación.</p>
+  <table>
+    <tr><th>Si falla…</th><th>Cómo se simula</th><th>Qué hace el sistema</th></tr>
+    <tr><td>Lambda sin capacidad</td><td>Concurrencia reservada = 0</td><td>El frontend reintenta y avisa “servicio degradado”; alarma por correo; se recupera sola</td></tr>
+    <tr><td>DynamoDB</td><td>La API apunta a una tabla inexistente</td><td>503 con mensaje claro, sin datos a medias; <code>/health</code> lo detecta</td></tr>
+    <tr><td>SNS</td><td>Topic inexistente + ticket crítico</td><td>El ticket se guarda; solo se pierde el correo (degradación elegante)</td></tr>
+    <tr><td>S3 (sitio)</td><td>Se borra <code>index.html</code></td><td>El versionado lo recupera en segundos, sin redeploy</td></tr>
+    <tr><td>Datos</td><td>Restauración Point-in-Time</td><td>Copia completa de la tabla a cualquier segundo de 35 días</td></tr>
+    <tr><td>Ataques</td><td>JSON roto, 1 MB, token falso, fuerza bruta</td><td>Siempre 4xx, nunca 5xx; bloqueo tras 5 intentos; anti-XSS</td></tr>
+    <tr><td>Carga</td><td>200 peticiones simultáneas</td><td>Lambda escala sola, 0 errores</td></tr>
+  </table>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">8</div>
+</section>
+
+<!-- 9 -->
+<section class="slide"><div class="barra"></div>
+  <h2>Costo estimado por año (sin capa gratuita)</h2>
+  <p class="bajada">Supuesto: 3 000 tickets, 1 500 fotos y 500 000 llamadas a la API al mes.</p>
+  <div class="grid g2" style="grid-template-columns: 1.4fr 1fr; align-items:center">
+    <div class="barras">
+      <div class="fila"><span class="et">Serverless (este proyecto)</span><div class="b" style="width:80px;background:#16a34a">$101</div></div>
+      <div class="fila"><span class="et">Con capa gratuita permanente</span><div class="b" style="width:64px;background:#22c55e;padding-left:10px">$29</div></div>
+      <div class="fila"><span class="et">EC2 + RDS + Load Balancer</span><div class="b" style="width:420px;background:#dc2626">$645</div></div>
+    </div>
+    <div class="card">
+      <div class="grande-num">≈ $8.40</div><p style="margin-bottom:12px">al mes. Lo más caro: el dashboard de CloudWatch ($3), luego DynamoDB ($2.28).</p>
+      <p><b>Decisiones que bajaron el costo:</b> consultas por índice en lugar de Scan, compresión de fotos en el navegador (~10× menos), caché de URLs firmadas y TTL.</p>
+    </div>
+  </div>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">9</div>
+</section>
+
+<!-- 10 -->
+<section class="slide"><div class="barra"></div>
+  <h2>¿Por qué estos servicios?</h2>
+  <p class="bajada">Ventajas y desventajas que encontramos.</p>
+  <div class="grid g2">
+    <div class="card" style="background:#f0fdf4;border-color:#bbf7d0"><h3>Ventajas</h3><ul style="font-size:23px;line-height:1.6;padding-left:24px;margin:8px 0 0">
+      <li>Cero costo cuando no hay uso (noches, vacaciones).</li>
+      <li>Alta disponibilidad en varias zonas sin configurarla.</li>
+      <li>Escala automáticamente en horas pico.</li>
+      <li>Sin servidores que parchar.</li></ul></div>
+    <div class="card" style="background:#fef2f2;border-color:#fecaca"><h3>Desventajas</h3><ul style="font-size:23px;line-height:1.6;padding-left:24px;margin:8px 0 0">
+      <li>Arranque en frío (+300-800 ms la primera vez).</li>
+      <li>DynamoDB obliga a diseñar las consultas desde el inicio.</li>
+      <li>Sitio sin HTTPS (CloudFront no disponible en el laboratorio).</li>
+      <li>Dependencia de AWS; Cognito restringido en Learner Lab.</li></ul></div>
+  </div>
+  <div class="marca">CUTonala Soporte Técnico</div><div class="num">10</div>
+</section>
+
+<!-- 11 -->
+<section class="slide portada">
+  <h1 style="font-size:54px">Conclusiones</h1>
+  <ul class="grande" style="color:#e2e8f0;max-width:1000px">
+    <li>Una aplicación web real para el campus, construida con 6 servicios de AWS y desplegada 100% con código.</li>
+    <li>≈ 6 veces más barata que una arquitectura con servidores, con alta disponibilidad incluida.</li>
+    <li>Ante la falla de cualquier componente responde de forma controlada y se recupera sola.</li>
+  </ul>
+  <div style="margin-top:46px;font-size:34px;font-weight:700">¿Preguntas?</div>
+  <div style="font-size:18px;color:#cbd5e1;margin-top:8px">github.com/bob11jake/cutonala-soporte-serverless</div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,154 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 640" width="1100" height="640" font-family="Inter, Segoe UI, Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="f" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#334155"/>
+    </marker>
+    <marker id="fa" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#b91c1c"/>
+    </marker>
+    <style>
+      .caja{fill:#fff;stroke-width:2;rx:10}
+      .t{font-size:15px;font-weight:700;fill:#0f172a}
+      .s{font-size:11.5px;fill:#475569}
+      .tag{font-size:10px;font-weight:700;fill:#fff;letter-spacing:.5px}
+      .l{stroke:#334155;stroke-width:1.8;fill:none;marker-end:url(#f)}
+      .la{stroke:#b91c1c;stroke-width:1.6;fill:none;stroke-dasharray:6 4;marker-end:url(#fa)}
+      .n{font-size:11px;font-weight:700;fill:#fff}
+      .et{font-size:11px;fill:#1e293b}
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1100" height="640" fill="#f8fafc"/>
+  <!-- Nube AWS -->
+  <rect x="230" y="20" width="855" height="605" rx="14" fill="#fff7ed" fill-opacity=".35" stroke="#f59e0b" stroke-dasharray="8 6" stroke-width="1.5"/>
+  <text x="248" y="44" font-size="13" font-weight="700" fill="#b45309">AWS Cloud — región us-east-1 (todo creado por infra/deploy.py)</text>
+
+  <!-- Usuarios -->
+  <rect x="20" y="225" width="185" height="150" rx="10" class="caja" stroke="#64748b"/>
+  <text x="112" y="252" text-anchor="middle" class="t">Navegador web</text>
+  <text x="112" y="275" text-anchor="middle" class="s">Comunidad universitaria</text>
+  <text x="112" y="292" text-anchor="middle" class="s">(solo nombre, sin cuenta)</text>
+  <text x="112" y="318" text-anchor="middle" class="s">Técnico / Administrador</text>
+  <text x="112" y="335" text-anchor="middle" class="s">(login con token HMAC)</text>
+  <text x="112" y="360" text-anchor="middle" class="s">HTML + JS + Chart.js</text>
+
+  <!-- S3 sitio -->
+  <rect x="270" y="65" width="210" height="95" rx="10" class="caja" stroke="#3f8624"/>
+  <rect x="270" y="65" width="210" height="22" rx="10" fill="#3f8624"/><rect x="270" y="77" width="210" height="10" fill="#3f8624"/>
+  <text x="280" y="81" class="tag">AMAZON S3 · SITIO WEB</text>
+  <text x="280" y="110" class="t">ticketflow-web</text>
+  <text x="280" y="130" class="s">Hosting estático público</text>
+  <text x="280" y="147" class="s">Versionado (recupera borrados)</text>
+
+  <!-- Lambda API -->
+  <rect x="270" y="235" width="210" height="130" rx="10" class="caja" stroke="#ed7100"/>
+  <rect x="270" y="235" width="210" height="22" rx="10" fill="#ed7100"/><rect x="270" y="247" width="210" height="10" fill="#ed7100"/>
+  <text x="280" y="251" class="tag">AWS LAMBDA · FUNCTION URL</text>
+  <text x="280" y="280" class="t">ticketflow-api</text>
+  <text x="280" y="300" class="s">Python 3.12 · 256 MB · 15 s</text>
+  <text x="280" y="317" class="s">REST: tickets, login, auditoría,</text>
+  <text x="280" y="334" class="s">métricas, comentarios, evidencias</text>
+  <text x="280" y="351" class="s">Reintentos adaptativos (boto3)</text>
+
+  <!-- S3 evidencias -->
+  <rect x="270" y="465" width="210" height="110" rx="10" class="caja" stroke="#3f8624"/>
+  <rect x="270" y="465" width="210" height="22" rx="10" fill="#3f8624"/><rect x="270" y="477" width="210" height="10" fill="#3f8624"/>
+  <text x="280" y="481" class="tag">AMAZON S3 · PRIVADO</text>
+  <text x="280" y="510" class="t">ticketflow-evidencias</text>
+  <text x="280" y="530" class="s">Fotos vía URL prefirmada</text>
+  <text x="280" y="547" class="s">Máx. 5 MB · solo imágenes</text>
+  <text x="280" y="564" class="s">Expiran a los 365 días</text>
+
+  <!-- DynamoDB -->
+  <rect x="560" y="215" width="230" height="170" rx="10" class="caja" stroke="#4d27aa"/>
+  <rect x="560" y="215" width="230" height="22" rx="10" fill="#4d27aa"/><rect x="560" y="227" width="230" height="10" fill="#4d27aa"/>
+  <text x="570" y="231" class="tag">AMAZON DYNAMODB · ON-DEMAND</text>
+  <text x="570" y="260" class="t">ticketflow-tickets</text>
+  <text x="570" y="277" class="s">GSI EstadoIndex · CategoriaIndex</text>
+  <text x="570" y="293" class="s">Contadores #STATS transaccionales</text>
+  <text x="570" y="309" class="s">Point-in-Time Recovery (35 días)</text>
+  <text x="570" y="335" class="t">ticketflow-auditoria</text>
+  <text x="570" y="351" class="s">GSI TimelineIndex · TTL 365 días</text>
+  <text x="570" y="375" class="t">ticketflow-usuarios <tspan class="s">(PBKDF2)</tspan></text>
+
+  <!-- SNS -->
+  <rect x="560" y="65" width="230" height="95" rx="10" class="caja" stroke="#e7157b"/>
+  <rect x="560" y="65" width="230" height="22" rx="10" fill="#e7157b"/><rect x="560" y="77" width="230" height="10" fill="#e7157b"/>
+  <text x="570" y="81" class="tag">AMAZON SNS</text>
+  <text x="570" y="110" class="t">ticketflow-alertas</text>
+  <text x="570" y="130" class="s">Ticket CRÍTICO · SLA vencido</text>
+  <text x="570" y="147" class="s">Alarmas de CloudWatch</text>
+
+  <!-- Correo -->
+  <rect x="880" y="75" width="185" height="75" rx="10" class="caja" stroke="#64748b"/>
+  <text x="972" y="105" text-anchor="middle" class="t">Correo del personal</text>
+  <text x="972" y="125" text-anchor="middle" class="s">Suscripción por email</text>
+
+  <!-- CloudWatch -->
+  <rect x="880" y="225" width="185" height="150" rx="10" class="caja" stroke="#e7157b"/>
+  <rect x="880" y="225" width="185" height="22" rx="10" fill="#c7136a"/><rect x="880" y="237" width="185" height="10" fill="#c7136a"/>
+  <text x="890" y="241" class="tag">AMAZON CLOUDWATCH</text>
+  <text x="890" y="270" class="s">Logs JSON (retención 14 días)</text>
+  <text x="890" y="290" class="s">4 alarmas: errores, throttles,</text>
+  <text x="890" y="306" class="s">latencia, monitor SLA</text>
+  <text x="890" y="326" class="s">Dashboard CUTonala-Soporte</text>
+  <text x="890" y="346" class="s">Métrica TicketsSLAVencidos</text>
+
+  <!-- SLA monitor -->
+  <rect x="560" y="465" width="230" height="110" rx="10" class="caja" stroke="#ed7100"/>
+  <rect x="560" y="465" width="230" height="22" rx="10" fill="#ed7100"/><rect x="560" y="477" width="230" height="10" fill="#ed7100"/>
+  <text x="570" y="481" class="tag">AWS LAMBDA</text>
+  <text x="570" y="510" class="t">ticketflow-sla-monitor</text>
+  <text x="570" y="530" class="s">Detecta tickets con SLA vencido</text>
+  <text x="570" y="547" class="s">Notifica una sola vez por ticket</text>
+  <text x="570" y="564" class="s">(escritura condicional)</text>
+
+  <!-- EventBridge -->
+  <rect x="880" y="480" width="185" height="80" rx="10" class="caja" stroke="#e7157b"/>
+  <rect x="880" y="480" width="185" height="22" rx="10" fill="#e7157b"/><rect x="880" y="492" width="185" height="10" fill="#e7157b"/>
+  <text x="890" y="496" class="tag">AMAZON EVENTBRIDGE</text>
+  <text x="890" y="525" class="t">rate(15 minutes)</text>
+  <text x="890" y="545" class="s">Regla programada</text>
+
+  <!-- Flechas -->
+  <path class="l" d="M205,250 C235,250 235,112 268,112"/>
+  <circle cx="240" cy="170" r="10" fill="#0f172a"/><text x="240" y="174" text-anchor="middle" class="n">1</text>
+
+  <path class="l" d="M205,300 L268,300"/>
+  <circle cx="237" cy="300" r="10" fill="#0f172a"/><text x="237" y="304" text-anchor="middle" class="n">2</text>
+
+  <path class="l" d="M205,350 C235,350 235,520 268,520"/>
+  <circle cx="240" cy="440" r="10" fill="#0f172a"/><text x="240" y="444" text-anchor="middle" class="n">5</text>
+
+  <path class="l" d="M480,300 L558,300"/>
+  <circle cx="519" cy="300" r="10" fill="#0f172a"/><text x="519" y="304" text-anchor="middle" class="n">3</text>
+
+  <path class="l" d="M440,235 C440,190 600,190 640,162"/>
+  <circle cx="520" cy="195" r="10" fill="#0f172a"/><text x="520" y="199" text-anchor="middle" class="n">4</text>
+
+  <path class="l" d="M375,365 L375,463"/>
+  <text x="383" y="410" class="et">firma URL</text>
+  <text x="383" y="424" class="et">(no recibe el archivo)</text>
+
+  <path class="l" d="M790,112 L878,112"/>
+
+  <path class="l" d="M880,520 L792,520"/>
+  <circle cx="836" cy="520" r="10" fill="#0f172a"/><text x="836" y="524" text-anchor="middle" class="n">6</text>
+  <path class="l" d="M675,465 L675,387"/>
+  <path class="l" d="M760,465 C820,430 820,190 760,162"/>
+
+  <path class="la" d="M480,355 C500,428 930,430 965,377"/>
+  <path class="la" d="M972,225 L972,152"/>
+  <circle cx="985" cy="190" r="10" fill="#b91c1c"/><text x="985" y="194" text-anchor="middle" class="n">7</text>
+  <text x="795" y="412" class="et" fill="#b91c1c">logs y métricas</text>
+
+  <!-- Leyenda -->
+  <text x="20" y="420" font-size="12" font-weight="700" fill="#0f172a">Flujo de datos</text>
+  <text x="20" y="440" class="s">1 Descarga el sitio estático</text>
+  <text x="20" y="457" class="s">2 Llamadas a la API (JSON/HTTPS)</text>
+  <text x="20" y="474" class="s">3 Lectura/escritura transaccional</text>
+  <text x="20" y="491" class="s">4 Alerta de ticket CRÍTICO</text>
+  <text x="20" y="508" class="s">5 Sube la foto directo a S3</text>
+  <text x="20" y="525" class="s">6 Revisión de SLA cada 15 min</text>
+  <text x="20" y="542" class="s">7 Alarma → SNS → correo</text>
+</svg>

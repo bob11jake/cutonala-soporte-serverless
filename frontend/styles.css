@@ -532,3 +532,4 @@ button.outline:hover {
 .sin-graficas canvas { display: none; }
 .sin-graficas .card::after { content: "Graficas no disponibles (no cargo Chart.js). El resto de la aplicacion sigue operando."; color: #64748b; font-size: 0.85rem; }
 button:disabled { opacity: 0.6; cursor: wait; }
+.chart-box { position: relative; height: 260px; }

@@ -25,7 +25,7 @@ function renderizarGraficas(c) {
         backgroundColor: ["#2563eb", "#f59e0b", "#8b5cf6", "#16a34a"],
       }],
     },
-    options: { responsive: true, plugins: { legend: { position: "bottom" } } },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } },
   });
 
   if (chartCategorias) chartCategorias.destroy();
@@ -40,6 +40,6 @@ function renderizarGraficas(c) {
         borderRadius: 6,
       }],
     },
-    options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } },
   });
 }
