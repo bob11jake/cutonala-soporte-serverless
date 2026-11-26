@@ -1,5 +1,11 @@
-﻿.venv/
+.venv/
 __pycache__/
+.pytest_cache/
 infra/state.json
 frontend/config.js
 .env
+.DS_Store
+.idea/
+docs/*.pdf
+docs/*.docx
+docs/*.pptx

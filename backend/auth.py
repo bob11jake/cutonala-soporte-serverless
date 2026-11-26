@@ -1,53 +1,74 @@
+"""Autenticacion: hash de contrasenas (PBKDF2) y tokens firmados con HMAC-SHA256.
+
+Este modulo no depende de boto3 para que infra/deploy.py pueda reutilizar
+hash_password() al crear los usuarios iniciales.
+"""
 import base64
 import hashlib
 import hmac
 import json
 import os
+import secrets
 import time
 
-SECRET_KEY = os.environ.get("JWT_SECRET", "ticketflow-enterprise-secret-2026").encode("utf-8")
+ITERACIONES = 120_000
+DURACION_TOKEN_SEG = 8 * 3600
 
-USUARIOS_DEMO = {
-    "admin@ticketflow.edu": {"password": "Admin123!", "nombre": "admin", "rol": "ADMIN"},
-    "soporte@ticketflow.edu": {"password": "Soporte123!", "nombre": "tecnico", "rol": "TECNICO"},
-    "usuario@ticketflow.edu": {"password": "User123!", "nombre": "usuario", "rol": "SOLICITANTE"},
-}
+# El secreto lo genera infra/deploy.py y lo inyecta como variable de entorno.
+# Si faltara, se usa uno aleatorio por contenedor: los tokens dejan de ser
+# validos entre contenedores, pero nunca se firma con un secreto conocido.
+SECRET_KEY = (os.environ.get("JWT_SECRET") or secrets.token_hex(32)).encode("utf-8")
 
-def generar_token(email, nombre, rol):
-    payload = {
-        "email": email,
-        "nombre": nombre,
-        "rol": rol,
-        "exp": int(time.time()) + 28800,
-    }
-    raw = json.dumps(payload, separators=(",", ":")).encode("utf-8")
-    b64 = base64.urlsafe_b64encode(raw).decode("utf-8")
-    firma = hmac.new(SECRET_KEY, b64.encode("utf-8"), hashlib.sha256).hexdigest()
-    return f"{b64}.{firma}"
+
+def hash_password(password, salt=None, iteraciones=ITERACIONES):
+    salt = salt or secrets.token_hex(16)
+    digest = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt.encode("utf-8"), iteraciones)
+    return f"pbkdf2_sha256${iteraciones}${salt}${digest.hex()}"
+
+
+def verificar_password(password, almacenado):
+    try:
+        algoritmo, iteraciones, salt, _ = almacenado.split("$")
+    except (ValueError, AttributeError):
+        return False
+    if algoritmo != "pbkdf2_sha256":
+        return False
+    calculado = hash_password(password, salt, int(iteraciones))
+    return hmac.compare_digest(calculado, almacenado)
+
+
+def _b64(data):
+    return base64.urlsafe_b64encode(data).decode("utf-8").rstrip("=")
+
+
+def _unb64(texto):
+    return base64.urlsafe_b64decode(texto + "=" * (-len(texto) % 4))
+
+
+def generar_token(email, nombre, rol, ahora=None):
+    ahora = int(ahora or time.time())
+    payload = {"email": email, "nombre": nombre, "rol": rol, "iat": ahora, "exp": ahora + DURACION_TOKEN_SEG}
+    cuerpo = _b64(json.dumps(payload, separators=(",", ":")).encode("utf-8"))
+    firma = hmac.new(SECRET_KEY, cuerpo.encode("utf-8"), hashlib.sha256).hexdigest()
+    return f"{cuerpo}.{firma}"
+
 
 def verificar_token(headers):
+    """Devuelve el payload del token si es valido y no ha expirado; si no, None."""
     auth_header = headers.get("authorization") or headers.get("Authorization") or ""
     if not auth_header.startswith("Bearer "):
         return None
-    token = auth_header.split(" ", 1)[1].strip()
-    partes = token.split(".")
+    partes = auth_header.split(" ", 1)[1].strip().split(".")
     if len(partes) != 2:
         return None
-    b64, firma_recibida = partes
-    firma_esperada = hmac.new(SECRET_KEY, b64.encode("utf-8"), hashlib.sha256).hexdigest()
+    cuerpo, firma_recibida = partes
+    firma_esperada = hmac.new(SECRET_KEY, cuerpo.encode("utf-8"), hashlib.sha256).hexdigest()
     if not hmac.compare_digest(firma_recibida, firma_esperada):
         return None
     try:
-        payload = json.loads(base64.urlsafe_b64decode(b64.encode("utf-8")).decode("utf-8"))
-        if payload.get("exp", 0) < int(time.time()):
-            return None
-        return payload
-    except Exception:
+        payload = json.loads(_unb64(cuerpo).decode("utf-8"))
+    except (ValueError, UnicodeDecodeError):
         return None
-
-def autenticar_credenciales(email, password):
-    user = USUARIOS_DEMO.get(email.lower().strip())
-    if not user or user["password"] != password:
+    if payload.get("exp", 0) < int(time.time()):
         return None
-    token = generar_token(email.lower().strip(), user["nombre"], user["rol"])
-    return {"token": token, "usuario": {"email": email, "nombre": user["nombre"], "rol": user["rol"]}}
+    return payload

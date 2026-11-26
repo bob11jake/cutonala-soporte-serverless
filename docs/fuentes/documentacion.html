@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Documentación — CUTonala Soporte Técnico</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 18mm 16mm; }
+  :root { --azul:#1d4ed8; --oscuro:#0f172a; --gris:#475569; --borde:#e2e8f0; --suave:#f1f5f9; }
+  * { box-sizing: border-box; }
+  body { font-family: "Inter", "Segoe UI", Helvetica, Arial, sans-serif; color: var(--oscuro); font-size: 10.5pt; line-height: 1.5; margin: 0; }
+  h1 { font-size: 20pt; color: var(--azul); margin: 0 0 6pt; break-after: avoid; }
+  h2 { font-size: 13.5pt; margin: 16pt 0 6pt; border-bottom: 2px solid var(--borde); padding-bottom: 3pt; break-after: avoid; }
+  h3 { font-size: 11pt; margin: 12pt 0 4pt; break-after: avoid; }
+  p { margin: 0 0 7pt; }
+  .seccion { break-before: page; }
+  table { width: 100%; border-collapse: collapse; margin: 6pt 0 10pt; font-size: 9pt; break-inside: auto; }
+  tr { break-inside: avoid; }
+  th { background: var(--oscuro); color: #fff; text-align: left; padding: 5pt 6pt; font-weight: 600; }
+  td { border-bottom: 1px solid var(--borde); padding: 4.5pt 6pt; vertical-align: top; }
+  tr:nth-child(even) td { background: #f8fafc; }
+  td.num, th.num { text-align: right; white-space: nowrap; }
+  tr.total td { font-weight: 700; background: #e0e7ff !important; }
+  code, pre { font-family: "JetBrains Mono", Consolas, Menlo, monospace; font-size: 8.8pt; }
+  code { background: var(--suave); padding: 1pt 4pt; border-radius: 3pt; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 8pt 10pt; border-radius: 6pt; margin: 4pt 0 9pt; white-space: pre-wrap; break-inside: avoid; }
+  .nota { background: #eff6ff; border-left: 4px solid var(--azul); padding: 7pt 10pt; margin: 8pt 0; font-size: 9.5pt; break-inside: avoid; }
+  .aviso { background: #fffbeb; border-left: 4px solid #d97706; padding: 7pt 10pt; margin: 8pt 0; font-size: 9.5pt; break-inside: avoid; }
+  .ok { color: #15803d; font-weight: 700; }
+  .pend { color: #b45309; font-weight: 700; }
+  ol, ul { margin: 0 0 8pt; padding-left: 16pt; }
+  li { margin-bottom: 2.5pt; }
+  figure { margin: 8pt 0 12pt; text-align: center; break-inside: avoid; }
+  figure img { width: 100%; border: 1px solid var(--borde); border-radius: 6pt; }
+  figcaption { font-size: 8.5pt; color: var(--gris); margin-top: 4pt; }
+  .dos { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; }
+  .tarjeta { border: 1px solid var(--borde); border-radius: 6pt; padding: 7pt 9pt; break-inside: avoid; }
+  .tarjeta h3 { margin-top: 0; }
+
+  /* Portada */
+  .portada { height: 255mm; display: flex; flex-direction: column; justify-content: space-between; }
+  .portada .marca { display: flex; align-items: center; gap: 12pt; }
+  .portada .logo { width: 54pt; height: 54pt; border-radius: 12pt; background: #f59e0b; color: #fff; font-weight: 800; font-size: 18pt; display: flex; align-items: center; justify-content: center; }
+  .portada h1 { font-size: 30pt; color: var(--oscuro); line-height: 1.1; margin-top: 60pt; }
+  .portada .sub { font-size: 14pt; color: var(--gris); margin-top: 8pt; }
+  .portada .chips span { display: inline-block; border: 1px solid var(--borde); border-radius: 20pt; padding: 3pt 10pt; margin: 3pt 4pt 0 0; font-size: 9.5pt; }
+  .portada table td { border: none; padding: 3pt 0; background: none !important; font-size: 10.5pt; }
+  .indice li { margin-bottom: 4pt; }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ PORTADA -->
+<section class="portada">
+  <div>
+    <div class="marca"><div class="logo">CUT</div><div><strong>Centro Universitario de Tonalá</strong><br><span style="color:#475569">Proyecto final — Servicios de nube (AWS)</span></div></div>
+    <h1>CUTonala Soporte Técnico</h1>
+    <div class="sub">Mesa de servicios universitaria con arquitectura serverless en Amazon Web Services</div>
+    <div class="chips" style="margin-top:16pt">
+      <span>Aplicación web</span><span>AWS Lambda</span><span>Amazon DynamoDB</span><span>Amazon S3</span>
+      <span>Amazon SNS</span><span>Amazon EventBridge</span><span>Amazon CloudWatch</span><span>Python · boto3</span>
+    </div>
+  </div>
+  <div>
+    <table>
+      <tr><td style="width:120pt;color:#475569">Integrantes</td><td>[Nombre completo — código]<br>[Nombre completo — código]<br>[Nombre completo — código]</td></tr>
+      <tr><td style="color:#475569">Profesor(a)</td><td>[Nombre del profesor]</td></tr>
+      <tr><td style="color:#475569">Repositorio</td><td>github.com/bob11jake/cutonala-soporte-serverless</td></tr>
+      <tr><td style="color:#475569">Fecha</td><td>Noviembre de 2026</td></tr>
+    </table>
+    <h3 style="margin-top:18pt">Contenido</h3>
+    <ol class="indice">
+      <li>Descripción del proyecto</li>
+      <li>Diagrama de arquitectura y flujo de datos</li>
+      <li>Guía de despliegue</li>
+      <li>Justificación de decisiones</li>
+      <li>Pruebas de resistencia</li>
+      <li>Análisis de costos</li>
+      <li>Seguridad, plan de trabajo y conclusiones</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============================================================ 1 -->
+<section class="seccion">
+<h1>1. Descripción del proyecto</h1>
+<p><strong>Problema.</strong> En el campus, los reportes de fallas (cortes de luz, fugas de agua, incidentes de seguridad, aulas dañadas o caídas de red) se hacen por mensajes, llamadas o de palabra. No hay registro, no se sabe quién atiende cada caso ni cuánto tarda, y las emergencias se mezclan con solicitudes menores.</p>
+<p><strong>Solución.</strong> CUTonala Soporte es una <strong>aplicación web</strong> donde cualquier miembro de la comunidad reporta una incidencia con solo escribir su nombre (opcionalmente con una foto), y el personal técnico la atiende siguiendo un flujo con tiempos de respuesta comprometidos (SLA) según la prioridad. Toda la solución corre en AWS sin servidores que administrar y se construye completa con un script de Python.</p>
+
+<h3>Funcionalidades</h3>
+<div class="dos">
+<div class="tarjeta"><h3>Comunidad universitaria</h3><ul>
+  <li>Acceso rápido con nombre, sin crear cuenta.</li>
+  <li>Registro de incidencias por categoría y prioridad.</li>
+  <li>Foto de evidencia (se comprime en el navegador y se sube directo a S3).</li>
+  <li>Seguimiento: estado, SLA, historial y comentarios.</li>
+</ul></div>
+<div class="tarjeta"><h3>Personal técnico y administración</h3><ul>
+  <li>Login con contraseña (hash PBKDF2) y token firmado; bloqueo tras 5 intentos fallidos.</li>
+  <li>Flujo controlado: Abierto → En progreso → En revisión → Resuelto.</li>
+  <li>KPIs y gráficas globales, filtros, búsqueda y exportación CSV.</li>
+  <li>Bitácora de auditoría; solo ADMIN elimina tickets.</li>
+</ul></div>
+<div class="tarjeta"><h3>Automatización</h3><ul>
+  <li>Correo inmediato al registrar un ticket <strong>CRÍTICO</strong>.</li>
+  <li>Revisión automática cada 15 minutos de tickets con SLA vencido y aviso (una sola vez por ticket).</li>
+</ul></div>
+<div class="tarjeta"><h3>Operación</h3><ul>
+  <li>Infraestructura 100% como código (despliegue, estado y destrucción).</li>
+  <li>Alarmas, dashboard y logs estructurados en CloudWatch.</li>
+  <li>22 pruebas automatizadas y 7 pruebas de fallas reales (7/7 superadas en AWS).</li>
+</ul></div>
+</div>
+
+<h3>Tiempos de atención (SLA)</h3>
+<table>
+  <tr><th>Prioridad</th><th>Tiempo máximo</th><th>Ejemplo</th></tr>
+  <tr><td>CRÍTICA</td><td>2 horas</td><td>Agresión en explanada, corte total de energía</td></tr>
+  <tr><td>ALTA</td><td>8 horas</td><td>Fuga de agua, puerta de emergencia trabada</td></tr>
+  <tr><td>MEDIA</td><td>24 horas</td><td>Luminarias fundidas, bebederos sin agua</td></tr>
+  <tr><td>BAJA</td><td>72 horas</td><td>Proyector que no detecta HDMI</td></tr>
+</table>
+
+<h3>Tamaño del proyecto</h3>
+<table>
+  <tr><th>Parte</th><th>Contenido</th><th class="num">Líneas</th></tr>
+  <tr><td>backend/</td><td>API REST, monitor de SLA, autenticación, acceso a datos, S3 y SNS (7 módulos)</td><td class="num">≈ 980</td></tr>
+  <tr><td>frontend/</td><td>Interfaz web, cliente HTTP con reintentos, gráficas y estilos</td><td class="num">≈ 1 230</td></tr>
+  <tr><td>infra/</td><td>Despliegue, estado y destrucción de 6 servicios de AWS</td><td class="num">≈ 700</td></tr>
+  <tr><td>tests/</td><td>Pruebas pytest, pruebas de fallas, datos demo y servidor local</td><td class="num">≈ 870</td></tr>
+</table>
+</section>
+
+<!-- ============================================================ 2 -->
+<section class="seccion">
+<h1>2. Diagrama de arquitectura</h1>
+<figure>
+  <img src="../arquitectura.png" alt="Diagrama de arquitectura de CUTonala Soporte">
+  <figcaption>Figura 1. Componentes de AWS y flujo de datos. Las flechas punteadas son telemetría y alarmas.</figcaption>
+</figure>
+
+<h3>Flujo de datos</h3>
+<ol>
+  <li><strong>Carga del sitio.</strong> El navegador descarga <code>index.html</code>, JavaScript y CSS desde el bucket S3 configurado como sitio web.</li>
+  <li><strong>Llamadas a la API.</strong> El JavaScript llama por HTTPS a la <em>Function URL</em> de la Lambda <code>ticketflow-api</code>. El token del personal viaja en el encabezado <code>Authorization</code>. Si la API responde 5xx o 429, el cliente reintenta con espera exponencial.</li>
+  <li><strong>Datos.</strong> La Lambda valida y escribe en DynamoDB. Crear, mover o eliminar un ticket actualiza en <em>una sola transacción</em> el ticket y el contador global <code>#STATS</code>; las listas se obtienen con índices secundarios (nunca recorriendo toda la tabla).</li>
+  <li><strong>Alerta crítica.</strong> Si el ticket es CRÍTICO, la Lambda publica en el topic SNS y AWS envía el correo al personal suscrito.</li>
+  <li><strong>Evidencias.</strong> La API firma una URL de subida temporal (15 min, máx. 5 MB, solo imágenes); el navegador sube la foto <em>directo</em> al bucket privado y luego confirma. Para verla, la API entrega URLs de lectura firmadas (1 h).</li>
+  <li><strong>Vigilancia de SLA.</strong> Cada 15 minutos EventBridge ejecuta <code>ticketflow-sla-monitor</code>, que busca tickets activos vencidos, los marca con escritura condicional y envía un resumen por SNS.</li>
+  <li><strong>Monitoreo.</strong> Ambas Lambdas escriben logs JSON en CloudWatch. Cuatro alarmas (errores, throttling, latencia y fallas del monitor) notifican por SNS.</li>
+</ol>
+
+<h3>Componentes</h3>
+<table>
+  <tr><th>Servicio</th><th>Recurso</th><th>Función</th></tr>
+  <tr><td>Amazon S3</td><td>ticketflow-web-&lt;cuenta&gt;</td><td>Hosting del frontend; versionado para recuperar archivos borrados.</td></tr>
+  <tr><td>Amazon S3</td><td>ticketflow-evidencias-&lt;cuenta&gt;</td><td>Fotos privadas; CORS para subida directa; expiración a 365 días.</td></tr>
+  <tr><td>AWS Lambda</td><td>ticketflow-api</td><td>API REST con 11 rutas; validación, autorización por rol y manejo de errores.</td></tr>
+  <tr><td>AWS Lambda</td><td>ticketflow-sla-monitor</td><td>Tarea programada de SLA; publica la métrica <code>TicketsSLAVencidos</code>.</td></tr>
+  <tr><td>Amazon DynamoDB</td><td>ticketflow-tickets</td><td>Tickets, historial, comentarios y evidencias. GSI por estado y por categoría. PITR.</td></tr>
+  <tr><td>Amazon DynamoDB</td><td>ticketflow-auditoria</td><td>Bitácora ordenada por fecha (GSI) con borrado automático por TTL.</td></tr>
+  <tr><td>Amazon DynamoDB</td><td>ticketflow-usuarios</td><td>Personal con hash PBKDF2, intentos fallidos y bloqueo temporal.</td></tr>
+  <tr><td>Amazon SNS</td><td>ticketflow-alertas</td><td>Correos de tickets críticos, SLA vencidos y alarmas.</td></tr>
+  <tr><td>Amazon EventBridge</td><td>ticketflow-sla-cada-15-min</td><td>Regla programada que dispara el monitor de SLA.</td></tr>
+  <tr><td>Amazon CloudWatch</td><td>Logs, 4 alarmas, dashboard</td><td>Observabilidad y avisos automáticos.</td></tr>
+</table>
+
+<h3>API REST</h3>
+<table>
+  <tr><th>Método y ruta</th><th>Acceso</th><th>Descripción</th></tr>
+  <tr><td><code>GET /health</code></td><td>Público</td><td>Estado del servicio y latencia de DynamoDB</td></tr>
+  <tr><td><code>POST /auth/login</code></td><td>Público</td><td>Login del personal; devuelve token de 8 h</td></tr>
+  <tr><td><code>GET /tickets</code></td><td>Público</td><td>Lista (filtros <code>?estado=</code> o <code>?categoria=</code>)</td></tr>
+  <tr><td><code>POST /tickets</code></td><td>Público con nombre</td><td>Crea ticket y calcula su SLA</td></tr>
+  <tr><td><code>PUT /tickets</code></td><td>TÉCNICO, ADMIN</td><td>Cambia estado (solo transiciones válidas)</td></tr>
+  <tr><td><code>DELETE /tickets?ticket_id=</code></td><td>ADMIN</td><td>Elimina el ticket y sus fotos</td></tr>
+  <tr><td><code>POST /tickets/comentarios</code></td><td>Público con nombre</td><td>Agrega comentario</td></tr>
+  <tr><td><code>POST /tickets/evidencia</code> y <code>/confirmar</code></td><td>Público con nombre</td><td>Subida de foto en dos pasos</td></tr>
+  <tr><td><code>GET /metricas</code>, <code>GET /auditoria</code></td><td>TÉCNICO, ADMIN</td><td>Contadores globales y bitácora</td></tr>
+</table>
+</section>
+
+<!-- ============================================================ 3 -->
+<section class="seccion">
+<h1>3. Guía de despliegue</h1>
+<p>Toda la infraestructura se crea con <code>infra/deploy.py</code> (Python + boto3). No se usa la consola web de AWS en ningún paso. El script es <strong>idempotente</strong>: si un recurso ya existe lo actualiza, así que puede ejecutarse cuantas veces sea necesario.</p>
+
+<h3>Requisitos</h3>
+<ul>
+  <li>Python 3.10 o superior, Git y un editor (VS Code o PyCharm).</li>
+  <li>AWS Academy Learner Lab activo (se usa el rol existente <code>LabRole</code>). En otra cuenta, define la variable <code>TICKETFLOW_ROLE</code> con el nombre de un rol para Lambda.</li>
+</ul>
+
+<h3>Paso 1. Clonar el repositorio</h3>
+<pre>git clone https://github.com/bob11jake/cutonala-soporte-serverless.git
+cd cutonala-soporte-serverless</pre>
+
+<h3>Paso 2. Entorno virtual y dependencias</h3>
+<div class="dos">
+<div><strong>macOS / Linux</strong>
+<pre>python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt</pre></div>
+<div><strong>Windows (PowerShell)</strong>
+<pre>py -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt</pre></div>
+</div>
+<p>Si PowerShell bloquea la activación: <code>Set-ExecutionPolicy -Scope CurrentUser RemoteSigned</code>. En PyCharm, selecciona <code>.venv</code> como intérprete del proyecto para que su terminal lo active sola.</p>
+
+<h3>Paso 3. Credenciales de AWS Academy</h3>
+<ol>
+  <li>En AWS Academy pulsa <em>Start Lab</em> y espera el círculo verde.</li>
+  <li>Abre <em>AWS Details → AWS CLI → Show</em> y copia el bloque completo (<code>[default]</code>, <code>aws_access_key_id</code>, <code>aws_secret_access_key</code>, <code>aws_session_token</code>).</li>
+  <li>Pégalo en el archivo de credenciales y guarda:</li>
+</ol>
+<div class="dos">
+<div><pre>mkdir -p ~/.aws
+open -e ~/.aws/credentials      # macOS</pre></div>
+<div><pre>mkdir $HOME\.aws -Force
+notepad $HOME\.aws\credentials   # Windows</pre></div>
+</div>
+<div class="nota">No hay que editar ningún Account ID: el script lo obtiene con <code>sts:GetCallerIdentity</code>. Las credenciales caducan al terminar la sesión del laboratorio; si aparece <code>ExpiredToken</code>, vuelve a copiarlas.</div>
+
+<h3>Paso 4. Desplegar</h3>
+<pre>python infra/deploy.py --email correo_del_equipo@ejemplo.com</pre>
+<p>El script ejecuta 9 etapas (en nuestra cuenta tardó 612 s, la mayor parte creando el índice de la auditoría): verifica credenciales, crea el topic SNS (y la suscripción), las 3 tablas con índices, PITR y TTL, los usuarios iniciales, el bucket de evidencias, las 2 Lambdas con su Function URL, la regla de EventBridge, las alarmas y el dashboard, y publica el frontend. Al final imprime la URL de la aplicación. Confirma el correo de suscripción que envía AWS para recibir alertas.</p>
+
+<h3>Paso 5. Datos de demostración y verificación</h3>
+<pre>python tests/seed_and_resilience.py   # borra los tickets y carga 8 de ejemplo en distintos estados
+python infra/status.py                 # estado de cada recurso y prueba de /health</pre>
+<p>Usuarios del personal: <code>admin@ticketflow.edu / Admin123!</code> y <code>soporte@ticketflow.edu / Soporte123!</code> (las contraseñas se guardan con hash; se recomienda cambiarlas en producción).</p>
+
+<h3>Paso 6. Pruebas</h3>
+<pre>python tests/chaos.py                  # 7 escenarios de falla real (~4 min) → docs/resultados_resiliencia.md
+pip install -r requirements-dev.txt
+python -m pytest -q                    # 22 pruebas con AWS simulado (no usa la cuenta)</pre>
+
+<h3>Paso 7. Eliminar todo</h3>
+<pre>python infra/destroy.py                # pide confirmación; borra los 6 servicios y sus datos</pre>
+
+<h3>Problemas comunes</h3>
+<table>
+  <tr><th>Síntoma</th><th>Causa y solución</th></tr>
+  <tr><td><code>command not found: pip</code></td><td>El entorno virtual no está activo: <code>source .venv/bin/activate</code>.</td></tr>
+  <tr><td><code>ExpiredToken</code> / <code>InvalidClientTokenId</code></td><td>Terminó la sesión del laboratorio: copia de nuevo las credenciales.</td></tr>
+  <tr><td><code>CERTIFICATE_VERIFY_FAILED</code> (macOS)</td><td>El Python de python.org no trae certificados; el proyecto usa <code>certifi</code> (incluido en requirements.txt).</td></tr>
+  <tr><td>La página dice “Sin conexión”</td><td><code>python infra/status.py</code>; si la API no responde, vuelve a ejecutar <code>deploy.py</code>.</td></tr>
+</table>
+</section>
+
+<!-- ============================================================ 4 -->
+<section class="seccion">
+<h1>4. Justificación de decisiones</h1>
+<p>El criterio principal fue que el sistema <strong>no cueste nada mientras no se usa</strong> (el campus tiene picos en horario de clases y casi nada de noche, fines de semana y vacaciones), que no haya servidores que parchar y que funcione dentro de las restricciones de AWS Academy.</p>
+
+<table>
+  <tr><th style="width:15%">Necesidad</th><th style="width:17%">Elegido</th><th style="width:20%">Alternativas</th><th>Por qué</th></tr>
+  <tr><td>Cómputo de la API</td><td>AWS Lambda</td><td>EC2, ECS/Fargate, Elastic Beanstalk</td><td>Se paga por petición y milisegundo; escala de 0 a cientos de instancias sin configuración. Un EC2 cuesta lo mismo a las 3 a. m. que en horas pico y requiere parches y monitoreo del sistema operativo.</td></tr>
+  <tr><td>Punto de entrada HTTP</td><td>Lambda Function URL</td><td>Amazon API Gateway</td><td>HTTPS y CORS sin costo adicional y con menos configuración. API Gateway agregaría <em>throttling</em> por cliente, llaves de API y caché, que este volumen no necesita (y cobra por millón de llamadas).</td></tr>
+  <tr><td>Base de datos</td><td>Amazon DynamoDB (on-demand)</td><td>Amazon RDS (MySQL/PostgreSQL), Aurora Serverless</td><td>Sin instancia encendida 24/7, latencia de milisegundos, cifrado y réplica en 3 zonas incluidos, transacciones, escrituras condicionales, PITR y TTL. RDS más pequeño cuesta ≈ 15 USD/mes aunque nadie lo use y requiere VPC.</td></tr>
+  <tr><td>Frontend</td><td>Amazon S3 (sitio estático)</td><td>Amplify Hosting, EC2 con Nginx</td><td>La interfaz es HTML/JS estático: S3 lo sirve por centavos y con versionado. CloudFront se descartó porque Learner Lab lo limita; sería la mejora para HTTPS y caché global.</td></tr>
+  <tr><td>Fotos</td><td>S3 privado + URL prefirmada</td><td>Guardar en DynamoDB, enviar por la Lambda</td><td>DynamoDB limita los items a 400 KB y la Lambda a 6 MB por petición. Con URL prefirmada el archivo no pasa por la Lambda (menos costo y tiempo) y el bucket nunca es público.</td></tr>
+  <tr><td>Notificaciones</td><td>Amazon SNS</td><td>Amazon SES, servicio externo</td><td>Se integra directo con alarmas de CloudWatch y no requiere verificar dominios (SES sí, y Learner Lab lo restringe). Admite agregar SMS o más suscriptores sin cambiar código.</td></tr>
+  <tr><td>Tareas programadas</td><td>Amazon EventBridge</td><td>Cron en un EC2</td><td>Regla administrada sin servidor; si una ejecución falla, la siguiente vuelve a revisar todo (la marca condicional evita avisos duplicados).</td></tr>
+  <tr><td>Autenticación</td><td>PBKDF2 + token HMAC propio</td><td>Amazon Cognito</td><td>Cognito es la opción para producción (MFA, recuperación de contraseña), pero Learner Lab restringe su uso. Se implementó lo esencial con buenas prácticas: hash con sal y 120 000 iteraciones, secreto aleatorio por despliegue, expiración y bloqueo por fuerza bruta.</td></tr>
+  <tr><td>Infraestructura como código</td><td>Python + boto3</td><td>CloudFormation, Terraform, AWS CDK</td><td>Lo pide el proyecto (shell o Python) y permite lógica propia: migrar tablas de despliegues anteriores, recalcular contadores y mostrar el progreso. Desventaja: el estado y la limpieza se programan a mano.</td></tr>
+</table>
+
+<h3>Ventajas encontradas</h3>
+<ul>
+  <li><strong>Costo proporcional al uso:</strong> con tráfico de un campus el costo mensual es de un dígito en dólares (sección 6).</li>
+  <li><strong>Alta disponibilidad incluida:</strong> Lambda, DynamoDB, S3 y SNS funcionan en varias zonas de disponibilidad sin configurarlo.</li>
+  <li><strong>Escalado automático:</strong> 200 peticiones simultáneas se atienden sin cambios (escenario 1).</li>
+  <li><strong>Despliegue reproducible:</strong> todo el ambiente se crea y se destruye con un comando (≈ 10 minutos la primera vez, por la creación de índices de DynamoDB).</li>
+</ul>
+<h3>Desventajas y limitaciones</h3>
+<ul>
+  <li><strong>Arranque en frío:</strong> la primera petición tras un rato inactivo tarda ≈ 300-800 ms más.</li>
+  <li><strong>Consultas limitadas por el modelo de datos:</strong> DynamoDB solo consulta eficientemente por llave o índice; una búsqueda de texto completo requeriría OpenSearch. Por eso se diseñaron índices por estado y categoría y contadores precalculados.</li>
+  <li><strong>Sitio sin HTTPS:</strong> el hosting de S3 solo sirve HTTP; se resolvería con CloudFront (no disponible en el laboratorio).</li>
+  <li><strong>Dependencia del proveedor:</strong> el código usa APIs específicas de AWS; migrar a otra nube implicaría reescribir la capa de datos.</li>
+  <li><strong>Restricciones del laboratorio:</strong> credenciales temporales, rol fijo <code>LabRole</code> y servicios bloqueados limitan algunas decisiones.</li>
+</ul>
+</section>
+
+<!-- ============================================================ 5 -->
+<section class="seccion">
+<h1>5. Pruebas de resistencia</h1>
+<p>Para cada componente se analizó qué pasaría si falla y cómo lo maneja el sistema. Las fallas se <strong>simulan de verdad</strong> sobre los recursos desplegados con <code>python tests/chaos.py</code>: el script inyecta la falla, mide la respuesta, restaura el componente (siempre, aunque la prueba falle) y mide el tiempo de recuperación.</p>
+
+<table>
+  <tr><th style="width:4%">#</th><th style="width:16%">Si falla…</th><th style="width:26%">¿Qué pasaría sin protección?</th><th style="width:27%">Cómo se simula</th><th>Cómo lo maneja el sistema</th></tr>
+  <tr><td>1</td><td>Pico de demanda</td><td>Saturación, tiempos de espera y errores.</td><td>200 peticiones simultáneas con 25 hilos.</td><td>Lambda crea más instancias automáticamente; DynamoDB on-demand absorbe la carga; boto3 reintenta con control adaptativo.</td></tr>
+  <tr><td>2</td><td>AWS Lambda (sin capacidad)</td><td>La página se queda “cargando” o muestra errores genéricos.</td><td>Concurrencia reservada de la función en 0 (rechaza todas las invocaciones).</td><td>El frontend reintenta con espera exponencial y muestra “Servicio degradado / Sin conexión” sin perder lo que el usuario escribió; la alarma de <em>throttles</em> avisa por correo. Al restaurar, se recupera sola.</td></tr>
+  <tr><td>3</td><td>Amazon DynamoDB</td><td>Error 500 con detalles internos o datos a medias.</td><td>Se cambia la variable de entorno para que la API apunte a una tabla inexistente.</td><td>Respuesta 503 con mensaje claro y sin detalles internos; <code>/health</code> devuelve 503; no se escriben datos parciales (transacciones). La alarma de errores avisa.</td></tr>
+  <tr><td>4</td><td>Amazon SNS</td><td>No se podría registrar un ticket crítico porque falla el aviso.</td><td>Se apunta la API a un topic inexistente y se crea un ticket CRÍTICO.</td><td><em>Degradación elegante:</em> el ticket se guarda (201) y solo se pierde el correo (<code>alerta_enviada=false</code>, registrado en logs). Lo mismo con la bitácora de auditoría.</td></tr>
+  <tr><td>5</td><td>Amazon S3 (sitio)</td><td>Sitio caído hasta volver a desplegar.</td><td>Se borra <code>index.html</code> del bucket.</td><td>El versionado conserva la versión anterior: se elimina el <em>delete marker</em> y el sitio vuelve en segundos, sin redeploy. <code>deploy.py --solo-frontend</code> es el plan B.</td></tr>
+  <tr><td>6</td><td>Entradas maliciosas</td><td>Caídas por datos inesperados, acceso no autorizado o robo de cuentas.</td><td>JSON roto, cuerpo de 1 MB, tipos incorrectos, token falsificado, inyección en filtros y 5 contraseñas erróneas.</td><td>Siempre 4xx (nunca 5xx); firma HMAC verificada en tiempo constante; bloqueo de 15 min tras 5 fallos (429); todo texto se escapa en el navegador (anti-XSS).</td></tr>
+  <tr><td>7</td><td>Pérdida de datos</td><td>Un borrado accidental sería irreversible.</td><td>Restauración real con Point-in-Time Recovery a una tabla nueva (<code>--restaurar</code>).</td><td>PITR permite volver a cualquier segundo de los últimos 35 días; el script compara el número de items y elimina la tabla temporal.</td></tr>
+  <tr><td>8</td><td>CDN de Chart.js</td><td>La página no carga si el script externo se cuelga.</td><td>Se bloqueó el CDN en la prueba del navegador.</td><td>El script se carga de forma asíncrona: la app funciona sin gráficas y muestra un aviso. <span class="ok">Verificado</span>.</td></tr>
+  <tr><td>9</td><td>Dos técnicos a la vez</td><td>Un cambio pisa al otro y los contadores se desajustan.</td><td>Prueba automatizada con escritura concurrente.</td><td>Escritura condicional sobre el estado anterior: solo uno gana, el otro recibe 409 y recarga. <span class="ok">Verificado</span>.</td></tr>
+</table>
+
+<h3>Resultados</h3>
+<p><strong>Pruebas automatizadas (pytest + moto):</strong> <span class="ok">22 de 22 superadas</span>, incluyendo DynamoDB caído (503 controlado), SNS caído, auditoría caída, error inesperado (500 sin detalles), concurrencia, bloqueo por fuerza bruta, tokens alterados/expirados y migración de un despliegue anterior.</p>
+<p><strong>Prueba de navegador (Playwright):</strong> flujo completo de alumno y administrador. Un título con <code>&lt;img onerror=alert()&gt;</code> se muestra como texto y no se ejecuta; la foto se sube y se visualiza; la app sigue operando sin Chart.js.</p>
+<p><strong>Escenarios sobre AWS real (<code>tests/chaos.py</code>, 25 de noviembre de 2026, us-east-1):</strong> <span class="ok">7 de 7 superados</span>.</p>
+<table>
+  <tr><th>#</th><th>Escenario</th><th>Observado</th><th>Recuperación</th><th>Resultado</th></tr>
+  <tr><td>1</td><td>200 peticiones simultáneas</td><td>200/200 respuestas HTTP 200; p50 448 ms, p95 550 ms, máx. 930 ms</td><td>N/A</td><td class="ok">Superada</td></tr>
+  <tr><td>2</td><td>Lambda sin capacidad</td><td>HTTP 429 <code>ReservedFunctionConcurrentInvocationLimitExceeded</code></td><td>0.3 s</td><td class="ok">Superada</td></tr>
+  <tr><td>3</td><td>DynamoDB no disponible</td><td>GET, POST y /health → 503 con mensaje controlado; sin datos parciales</td><td>1.2 s</td><td class="ok">Superada</td></tr>
+  <tr><td>4</td><td>SNS no disponible</td><td>Ticket CRÍTICO creado (HTTP 201) con <code>alerta_enviada=false</code></td><td>Inmediata</td><td class="ok">Superada</td></tr>
+  <tr><td>5</td><td>index.html borrado</td><td>Antes 200 → durante 404 → después 200 (versionado)</td><td>0.5 s</td><td class="ok">Superada</td></tr>
+  <tr><td>6</td><td>Entradas maliciosas y fuerza bruta</td><td>400, 400, 400, 401, 403, 400 y bloqueo 429; ningún 5xx</td><td>N/A</td><td class="ok">Superada</td></tr>
+  <tr><td>7</td><td>Point-in-Time Recovery</td><td>PITR activo en la tabla de tickets (la restauración completa se ejecuta con <code>--restaurar</code>)</td><td>—</td><td class="ok">Superada</td></tr>
+</table>
+<div class="nota"><strong>Lección aprendida durante las pruebas:</strong> en una primera ejecución contra un despliegue anterior (sin versionado en el bucket), el escenario 5 borró <code>index.html</code> de forma permanente y el sitio quedó caído hasta volver a desplegar. Se corrigió el script: ahora verifica que la API desplegada sea la versión actual y no inyecta la falla si el bucket no tiene versionado. Esto mostró por qué el versionado de S3 es necesario.</div>
+
+<h3>Riesgos que no se cubren</h3>
+<ul>
+  <li><strong>Caída de toda la región us-east-1:</strong> requeriría DynamoDB Global Tables y despliegue en una segunda región (duplica costos; no justificado para este uso).</li>
+  <li><strong>Ataque de denegación de servicio:</strong> la Function URL no tiene WAF; con API Gateway + AWS WAF se limitaría por IP.</li>
+</ul>
+</section>
+
+<!-- ============================================================ 6 -->
+<section class="seccion">
+<h1>6. Análisis de costos</h1>
+<p><strong>Costo real durante el desarrollo:</strong> el proyecto se desplegó en AWS Academy Learner Lab, cuyo crédito cubre el consumo. El panel del laboratorio mostró un gasto de <strong>[$ X.XX]</strong> al cierre del proyecto (captura en el anexo). La mayor parte del tiempo se usó el modo local (<code>tests/servidor_local.py</code>), que no genera costos.</p>
+
+<h3>Estimación de un año fuera de la capa gratuita</h3>
+<p><strong>Escenario de uso supuesto</strong> para el CUTonalá: 3 000 tickets al mes, 1 500 fotos al mes (≈ 300 KB cada una tras la compresión en el navegador), 20 000 visitas al sitio y ≈ 500 000 llamadas a la API al mes (incluye el refresco automático cada 60 s de 10 técnicos durante su jornada). Precios de lista de us-east-1, sin capa gratuita.</p>
+<table>
+  <tr><th>Servicio</th><th>Concepto</th><th>Cálculo mensual</th><th class="num">USD/mes</th></tr>
+  <tr><td rowspan="2">AWS Lambda</td><td>Peticiones</td><td>500 000 × $0.20 / millón</td><td class="num">0.10</td></tr>
+  <tr><td>Cómputo</td><td>API: 500 000 × 0.15 s × 0.25 GB = 18 750 GB-s; monitor: 720 GB-s; × $0.0000166667</td><td class="num">0.32</td></tr>
+  <tr><td rowspan="3">Amazon DynamoDB</td><td>Lecturas</td><td>≈ 15.5 M unidades de lectura × $0.125 / millón</td><td class="num">1.94</td></tr>
+  <tr><td>Escrituras</td><td>≈ 180 000 unidades (tickets, transacciones, comentarios, auditoría) × $0.625 / millón</td><td class="num">0.11</td></tr>
+  <tr><td>Almacenamiento + PITR</td><td>≈ 0.5 GB × ($0.25 + $0.20)</td><td class="num">0.23</td></tr>
+  <tr><td rowspan="2">Amazon S3</td><td>Sitio web</td><td>120 000 GET ($0.05) + 6 GB de transferencia × $0.09 ($0.54)</td><td class="num">0.59</td></tr>
+  <tr><td>Evidencias</td><td>≈ 2.7 GB promedio × $0.023 ($0.06) + peticiones ($0.02) + 9 GB de transferencia ($0.81)</td><td class="num">0.89</td></tr>
+  <tr><td>Amazon SNS</td><td>Correos</td><td>≈ 1 000 correos × $2.00 / 100 000</td><td class="num">0.02</td></tr>
+  <tr><td>Amazon EventBridge</td><td>Regla programada</td><td>2 880 invocaciones al mes</td><td class="num">0.00</td></tr>
+  <tr><td rowspan="3">Amazon CloudWatch</td><td>Dashboard</td><td>1 dashboard × $3.00</td><td class="num">3.00</td></tr>
+  <tr><td>Alarmas y métrica</td><td>4 alarmas × $0.10 + 1 métrica personalizada × $0.30</td><td class="num">0.70</td></tr>
+  <tr><td>Logs</td><td>≈ 1 GB ingerido × $0.50 (retención de 14 días)</td><td class="num">0.50</td></tr>
+  <tr class="total"><td colspan="3">Total mensual estimado</td><td class="num">≈ 8.40</td></tr>
+  <tr class="total"><td colspan="3">Total anual estimado (12 meses)</td><td class="num">≈ 101</td></tr>
+</table>
+
+<div class="dos">
+<div class="tarjeta"><h3>Con la capa gratuita permanente</h3>
+<p>Lambda (1 M de peticiones y 400 000 GB-s), SNS (1 000 correos), CloudWatch (3 dashboards, 10 alarmas, 10 métricas, 5 GB de logs) y los primeros 100 GB de transferencia son gratuitos cada mes. El costo bajaría a <strong>≈ 2.40 USD/mes (≈ 29 USD/año)</strong>, casi todo DynamoDB.</p></div>
+<div class="tarjeta"><h3>Comparación con arquitectura tradicional</h3>
+<p>EC2 t3.small 24/7 (≈ $15.2) + RDS db.t3.micro (≈ $14.7 con 20 GB) + Application Load Balancer (≈ $22) + EBS (≈ $1.6) ≈ <strong>53 USD/mes (≈ 645 USD/año)</strong>, sin alta disponibilidad. La opción serverless es ≈ 6 veces más barata.</p></div>
+</div>
+
+<h3>Observaciones</h3>
+<ul>
+  <li><strong>El rubro más caro es el dashboard de CloudWatch</strong> (36 % del total). Si el presupuesto fuera crítico, se podría eliminar y consultar las métricas desde la consola.</li>
+  <li><strong>Decisiones de diseño que bajaron el costo:</strong> consultas por índice en lugar de <em>Scan</em> (al año, recorrer toda la tabla en cada carga costaría cientos de dólares al mes); compresión de fotos en el navegador (≈ 10 veces menos almacenamiento y transferencia); reutilizar las URLs firmadas para aprovechar la caché del navegador; TTL y expiración automática de datos viejos.</li>
+  <li><strong>Escalabilidad del costo:</strong> con 10 veces más uso, el costo crece de forma casi lineal (≈ 45-50 USD/mes), sin rediseñar nada.</li>
+  <li>Los precios son estimaciones con precios de lista; deben confirmarse en <em>AWS Pricing Calculator</em> (calculator.aws) antes de una implementación real.</li>
+</ul>
+</section>
+
+<!-- ============================================================ 7 -->
+<section class="seccion">
+<h1>7. Seguridad, plan de trabajo y conclusiones</h1>
+<h3>Medidas de seguridad</h3>
+<table>
+  <tr><th>Riesgo</th><th>Medida implementada</th></tr>
+  <tr><td>Robo de contraseñas</td><td>Hash PBKDF2-SHA256 con sal aleatoria y 120 000 iteraciones; nunca se guardan en texto plano.</td></tr>
+  <tr><td>Fuerza bruta</td><td>Bloqueo de 15 minutos tras 5 intentos fallidos; los intentos quedan en la bitácora.</td></tr>
+  <tr><td>Suplantación</td><td>Tokens firmados con HMAC-SHA256, secreto aleatorio por despliegue, expiración de 8 h y verificación en tiempo constante.</td></tr>
+  <tr><td>Escalada de privilegios</td><td>Control de acceso por rol (RBAC) en el servidor en cada ruta; la interfaz solo oculta botones.</td></tr>
+  <tr><td>XSS</td><td>Todo texto del usuario se escapa antes de insertarlo en la página; eventos por delegación, sin <code>onclick</code> con datos.</td></tr>
+  <tr><td>Fotos privadas</td><td>Bucket con bloqueo de acceso público; URLs temporales; solo imágenes de hasta 5 MB (validado por S3).</td></tr>
+  <tr><td>Fuga de información</td><td>Errores sin trazas internas; logs estructurados solo con método, ruta, estado y duración.</td></tr>
+  <tr><td>Secretos en el repositorio</td><td>No hay Account ID, llaves ni secretos en el código; <code>state.json</code> y <code>config.js</code> están en <code>.gitignore</code>.</td></tr>
+</table>
+
+<h3>Plan de trabajo (4 semanas)</h3>
+<table>
+  <tr><th style="width:14%">Semana</th><th>Actividades</th></tr>
+  <tr><td>1</td><td>Análisis del problema en el campus, requisitos, prioridades y SLA, selección de servicios, modelo de datos en DynamoDB (llaves, índices, contadores).</td></tr>
+  <tr><td>2</td><td>API en Lambda (rutas, validación, roles), autenticación, script de despliegue con boto3, primera versión del frontend.</td></tr>
+  <tr><td>3</td><td>Evidencias con S3 y URLs prefirmadas, alertas SNS, monitor de SLA con EventBridge, gráficas, auditoría y exportación CSV.</td></tr>
+  <tr><td>4</td><td>Alarmas y dashboard, endurecimiento de seguridad, pruebas automatizadas y de fallas, análisis de costos, documentación y presentación.</td></tr>
+</table>
+
+<h3>Trabajo futuro</h3>
+<ul>
+  <li>Amazon CloudFront con HTTPS y dominio propio para el sitio.</li>
+  <li>Amazon Cognito con el correo institucional y MFA para el personal.</li>
+  <li>API Gateway + AWS WAF para limitar peticiones por IP.</li>
+  <li>Asignación de tickets a técnicos específicos y encuesta de satisfacción al resolver.</li>
+  <li>Pipeline de CI/CD (GitHub Actions) que ejecute las pruebas y despliegue automáticamente.</li>
+</ul>
+
+<h3>Conclusiones</h3>
+<p>Se construyó una aplicación web completa que resuelve un problema real del campus usando seis servicios administrados de AWS, desplegada en su totalidad con código. La arquitectura serverless resultó adecuada para un uso con picos y periodos inactivos: el costo estimado es de alrededor de 100 USD al año sin capa gratuita (frente a ≈ 645 USD de una arquitectura con servidores), con alta disponibilidad incluida. Las pruebas de resistencia muestran que la falla de cualquier componente produce una respuesta controlada y que el sistema se recupera solo al restaurarlo. El aprendizaje principal fue diseñar el modelo de datos y los patrones de resiliencia (transacciones, escrituras condicionales, reintentos y degradación elegante) desde el inicio, no al final.</p>
+</section>
+
+</body>
+</html>

@@ -1,109 +1,112 @@
-import json
+"""Carga datos de demostracion y ejecuta una verificacion rapida (smoke test) de la API.
+
+Uso:
+    python tests/seed_and_resilience.py              # BORRA los tickets existentes y carga la demo
+    python tests/seed_and_resilience.py --conservar  # agrega la demo sin borrar nada
+
+Para las pruebas de resiliencia completas (fallas reales en AWS) usa tests/chaos.py.
+"""
+import argparse
+import sys
 import time
-import urllib.request
-import urllib.error
 from concurrent.futures import ThreadPoolExecutor
+from pathlib import Path
+
 import boto3
 
-with open("infra/state.json", encoding="utf-8") as f:
-    API_URL = json.load(f)["api_url"].rstrip("/")
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from common import cargar_estado, req, verificar_version_desplegada  # noqa: E402
+from config import AUDIT_TABLE, REGION, TICKETS_TABLE  # noqa: E402
 
-def limpiar_tablas_anteriores():
-    print("=== 0. ELIMINANDO TICKETS Y AUDITORIA ANTERIORES EN DYNAMODB ===")
-    dynamodb = boto3.resource("dynamodb", region_name="us-east-1")
-    for nombre_tabla, llave in [("ticketflow-tickets", "ticket_id"), ("ticketflow-auditoria", "audit_id")]:
-        tabla = dynamodb.Table(nombre_tabla)
-        scan = tabla.scan(ProjectionExpression=llave)
-        items = scan.get("Items", [])
-        with tabla.batch_writer() as batch:
-            for item in items:
-                batch.delete_item(Key={llave: item[llave]})
-        print(f" -> {len(items)} registros eliminados de {nombre_tabla}")
+API = cargar_estado()["api_url"]
 
-def req(path="", metodo="GET", payload=None, token=None):
-    data = json.dumps(payload).encode("utf-8") if payload is not None else None
-    headers = {"Content-Type": "application/json"}
-    if token:
-        headers["Authorization"] = f"Bearer {token}"
-    r = urllib.request.Request(f"{API_URL}{path}", data=data, headers=headers, method=metodo)
-    try:
-        with urllib.request.urlopen(r, timeout=10) as resp:
-            return resp.status, json.loads(resp.read().decode("utf-8"))
-    except urllib.error.HTTPError as e:
-        return e.code, json.loads(e.read().decode("utf-8"))
-
-limpiar_tablas_anteriores()
-
-print("\n=== 1. AUTENTICACION RBAC (OBTENCION DE TOKEN ADMIN) ===")
-code, auth = req("/auth/login", "POST", {"email": "admin@ticketflow.edu", "password": "Admin123!"})
-token_admin = auth["token"]
-print(f"Login admin -> HTTP {code} | Nombre: {auth['usuario']['nombre']} | Rol: {auth['usuario']['rol']}")
-
-tickets_universidad = [
-    {
-        "titulo": "Corte de energia electrica en Edificio B",
-        "categoria": "ELECTRICIDAD",
-        "prioridad": "CRITICA",
-        "descripcion": "Falla total de luz en salones de planta alta y pasillo central desde el inicio del turno matutino"
-    },
-    {
-        "titulo": "Fuga de agua potable en sanitarios de Biblioteca",
-        "categoria": "AGUA",
-        "prioridad": "ALTA",
-        "descripcion": "Tuberia rota debajo de los lavabos provoca encharcamiento en el acceso principal"
-    },
-    {
-        "titulo": "Reporte de agresion verbal y conato de violencia en explanada",
-        "categoria": "SEGURIDAD",
-        "prioridad": "CRITICA",
-        "descripcion": "Se solicita intervencion inmediata de vigilancia universitaria junto a la cafeteria central"
-    },
-    {
-        "titulo": "Luminarias fundidas en estacionamiento sur del campus",
-        "categoria": "ELECTRICIDAD",
-        "prioridad": "MEDIA",
-        "descripcion": "Cuatro postes de alumbrado exterior permanecen apagados durante el horario nocturno"
-    },
-    {
-        "titulo": "Filtracion de agua y desprendimiento en plafon del Aula 14",
-        "categoria": "INFRAESTRUCTURA",
-        "prioridad": "ALTA",
-        "descripcion": "Humedad acumulada en el techo cerca del pizarron afecta las clases del modulo"
-    },
-    {
-        "titulo": "Sin suministro de agua en bebederos del Edificio D",
-        "categoria": "AGUA",
-        "prioridad": "MEDIA",
-        "descripcion": "Baja presion en toda la red hidraulica del edificio de laboratorios"
-    },
+TICKETS_DEMO = [
+    ("Corte de energia electrica en Edificio B", "ELECTRICIDAD", "CRITICA",
+     "Falla total de luz en salones de planta alta y pasillo central desde el inicio del turno matutino", "EN_PROGRESO"),
+    ("Fuga de agua potable en sanitarios de Biblioteca", "AGUA", "ALTA",
+     "Tuberia rota debajo de los lavabos provoca encharcamiento en el acceso principal", "EN_REVISION"),
+    ("Reporte de agresion verbal en explanada", "SEGURIDAD", "CRITICA",
+     "Se solicita intervencion inmediata de vigilancia universitaria junto a la cafeteria central", "RESUELTO"),
+    ("Luminarias fundidas en estacionamiento sur", "ELECTRICIDAD", "MEDIA",
+     "Cuatro postes de alumbrado exterior permanecen apagados durante el horario nocturno", "ABIERTO"),
+    ("Filtracion de agua en plafon del Aula 14", "INFRAESTRUCTURA", "ALTA",
+     "Humedad acumulada en el techo cerca del pizarron afecta las clases del modulo", "EN_PROGRESO"),
+    ("Sin suministro de agua en bebederos del Edificio D", "AGUA", "MEDIA",
+     "Baja presion en toda la red hidraulica del edificio de laboratorios", "ABIERTO"),
+    ("Proyector descompuesto en Auditorio Central", "INFRAESTRUCTURA", "BAJA",
+     "El proyector enciende pero no detecta la entrada HDMI de las laptops", "RESUELTO"),
+    ("Puerta de emergencia trabada en Edificio C", "SEGURIDAD", "ALTA",
+     "La barra antipanico de la salida norte no abre completamente", "ABIERTO"),
 ]
+FLUJO = ["ABIERTO", "EN_PROGRESO", "EN_REVISION", "RESUELTO"]
 
-print("\n=== 2. POBLANDO INCIDENCIAS UNIVERSITARIAS (SIN ENIE NI COMAS) ===")
-for t in tickets_universidad:
-    c, _ = req("", "POST", t, token=token_admin)
-    print(f"POST [{t['categoria']}] '{t['titulo']}' -> HTTP {c}")
 
-c_guest, _ = req("", "POST", {
-    "solicitante": "alumno",
-    "titulo": "Caida de red inalambrica en laboratorio de computo 2",
-    "categoria": "CONECTIVIDAD",
-    "prioridad": "MEDIA",
-    "descripcion": "Los equipos de escritorio no obtienen direccion IP para entregar practicas"
-})
-print(f"POST Alumno sin contrasena -> HTTP {c_guest}")
+def limpiar():
+    print("=== 0. ELIMINANDO TICKETS Y AUDITORIA ANTERIORES ===")
+    ddb = boto3.resource("dynamodb", region_name=REGION)
+    for nombre, llave in [(TICKETS_TABLE, "ticket_id"), (AUDIT_TABLE, "audit_id")]:
+        tabla, total, inicio = ddb.Table(nombre), 0, None
+        while True:
+            kwargs = {"ProjectionExpression": llave, **({"ExclusiveStartKey": inicio} if inicio else {})}
+            res = tabla.scan(**kwargs)
+            with tabla.batch_writer() as batch:
+                for item in res.get("Items", []):
+                    batch.delete_item(Key={llave: item[llave]})
+            total += len(res.get("Items", []))
+            inicio = res.get("LastEvaluatedKey")
+            if not inicio:
+                break
+        print(f" -> {total} registros eliminados de {nombre}")
 
-print("\n=== 3. PRUEBA DE SEGURIDAD RBAC: CAMBIO DE ESTADO SIN TOKEN (HTTP 403) ===")
-c_unauth, err_unauth = req("", "PUT", {"ticket_id": "12345678", "estado": "RESUELTO"})
-print(f"Bloqueo de operacion privilegiada -> HTTP {c_unauth}: {err_unauth}")
 
-print("\n=== 4. PRUEBA DE VALIDACION: PAYLOAD CORRUPTO (HTTP 400) ===")
-c_bad, err_bad = req("", "POST", {"solicitante": "alumno", "titulo": "ab", "categoria": "INVALIDA"}, token=token_admin)
-print(f"Rechazo de datos malformados -> HTTP {c_bad}: {err_bad}")
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--conservar", action="store_true", help="no borrar los datos existentes")
+    args = parser.parse_args()
+    verificar_version_desplegada(API)
+    if not args.conservar:
+        limpiar()
 
-print("\n=== 5. PRUEBA DE CONCURRENCIA: 80 PETICIONES SIMULTANEAS ===")
-inicio = time.time()
-with ThreadPoolExecutor(max_workers=20) as pool:
-    codigos = list(pool.map(lambda _: req("")[0], range(80)))
-duracion = round(time.time() - inicio, 2)
-resumen = {c: codigos.count(c) for c in set(codigos)}
-print(f"80 peticiones resueltas en {duracion}s | Distribucion HTTP: {resumen}")
+    print("\n=== 1. AUTENTICACION (token de ADMIN y TECNICO) ===")
+    code, auth, _ = req(API + "/auth/login", "POST", {"email": "admin@ticketflow.edu", "password": "Admin123!"})
+    if code != 200:
+        sys.exit(f"Login fallo (HTTP {code}): {auth}. Vuelve a ejecutar python infra/deploy.py")
+    admin = auth["token"]
+    _, auth_tec, _ = req(API + "/auth/login", "POST", {"email": "soporte@ticketflow.edu", "password": "Soporte123!"})
+    tecnico = auth_tec["token"]
+    print(f"Login admin -> HTTP {code} | Rol: {auth['usuario']['rol']}")
+
+    print("\n=== 2. POBLANDO INCIDENCIAS UNIVERSITARIAS ===")
+    for titulo, categoria, prioridad, descripcion, destino in TICKETS_DEMO:
+        c, data, _ = req(API + "/tickets", "POST", {
+            "solicitante": "Comunidad CUTonala", "titulo": titulo, "categoria": categoria,
+            "prioridad": prioridad, "descripcion": descripcion})
+        tid = data["ticket"]["ticket_id"]
+        for estado in FLUJO[1:FLUJO.index(destino) + 1]:
+            req(API + "/tickets", "PUT", {"ticket_id": tid, "estado": estado, "nota": "Atendido por soporte"}, tecnico)
+        if destino != "ABIERTO":
+            req(API + "/tickets/comentarios", "POST", {"ticket_id": tid, "texto": "Personal asignado al reporte"}, token=tecnico)
+        print(f"POST [{categoria:<15}] {titulo[:45]:<45} -> HTTP {c} -> {destino}")
+
+    print("\n=== 3. SEGURIDAD: cambio de estado sin token (esperado 403) ===")
+    c, err, _ = req(API + "/tickets", "PUT", {"ticket_id": "12345678", "estado": "RESUELTO"})
+    print(f"HTTP {c}: {err}")
+
+    print("\n=== 4. VALIDACION: datos invalidos (esperado 400) ===")
+    c, err, _ = req(API + "/tickets", "POST", {"solicitante": "alumno", "titulo": "ab", "categoria": "INVALIDA"}, token=admin)
+    print(f"HTTP {c}: {err}")
+
+    print("\n=== 5. CONCURRENCIA: 80 peticiones simultaneas ===")
+    inicio = time.time()
+    with ThreadPoolExecutor(max_workers=20) as pool:
+        codigos = [r[0] for r in pool.map(lambda _: req(API + "/tickets"), range(80))]
+    print(f"80 peticiones en {time.time() - inicio:.2f}s | Distribucion HTTP: { {c: codigos.count(c) for c in set(codigos)} }")
+
+    print("\n=== 6. METRICAS GLOBALES ===")
+    _, m, _ = req(API + "/metricas", token=admin)
+    print(m)
+    print("\nListo. Para las pruebas de fallas reales: python tests/chaos.py")
+
+
+if __name__ == "__main__":
+    main()
