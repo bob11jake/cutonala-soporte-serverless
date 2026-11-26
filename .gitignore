@@ -6,3 +6,4 @@ frontend/config.js
 .env
 .DS_Store
 .idea/
+docs/*.pdf

@@ -31,7 +31,7 @@ Amazon CloudWatch: logs (14 días), 4 alarmas → SNS, dashboard y métrica Tick
 | Amazon CloudWatch | Logs estructurados, alarmas, dashboard y métrica personalizada |
 
 La documentación completa (guía de despliegue, diagrama, justificación, costos y pruebas de resiliencia)
-está en [`docs/Documentacion_CUTonala_Soporte.pdf`](docs/Documentacion_CUTonala_Soporte.pdf).
+se entrega como PDF por separado. Sus fuentes están en `docs/fuentes/` y el diagrama en `docs/arquitectura.png`.
 
 ## Requisitos
 
@@ -137,5 +137,5 @@ backend/     Lambda: lambda_function.py (API), sla_monitor.py, auth.py, reposito
 frontend/    index.html, app.js, api.js, charts.js, styles.css  (config.js se genera al desplegar)
 infra/       deploy.py, destroy.py, status.py, config.py
 tests/       test_backend.py (pytest), chaos.py, seed_and_resilience.py, servidor_local.py
-docs/        documentación PDF, presentación y fuentes
+docs/        diagrama, capturas, resultados de resiliencia y fuentes de la documentación
 ```
