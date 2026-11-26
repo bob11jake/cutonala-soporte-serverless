@@ -7,3 +7,5 @@ frontend/config.js
 .DS_Store
 .idea/
 docs/*.pdf
+docs/*.docx
+docs/*.pptx
